@@ -49,6 +49,10 @@ const updatePost = (req, res) => {
 exports.updatePost = updatePost;
 const deletePost = (req, res) => {
     const { id } = req.params;
+    const post = posts_repositories_1.postRepository.searchPost(id);
+    if (!post) {
+        return res.status(HttpStatuses_1.HttpStatuses.NOT_FOUND).send('Post not found');
+    }
     posts_repositories_1.postRepository.delete(id);
     return res.status(HttpStatuses_1.HttpStatuses.NO_CONTENT).send();
 };
