@@ -46,7 +46,7 @@ export const updateBlog = (req:Request,res:Response) => {
     }
     const updatedBlog = blogRepository.update(blog, {id: blog.id, name, description, websiteUrl})
 
-    return res.status(HttpStatuses.OK).send(updatedBlog)
+    return res.status(HttpStatuses.NO_CONTENT).send(updatedBlog)
 
 }
 
@@ -56,5 +56,5 @@ export const deleteBlog = (req:Request,res:Response) => {
         return res.status(HttpStatuses.NOT_FOUND).send('Blog not found')
      }
      blogRepository.delete(req.params.id as string)
-     return res.status(HttpStatuses.OK).send('Blog deleted')
+     return res.status(HttpStatuses.NO_CONTENT).send('Blog deleted')
 }

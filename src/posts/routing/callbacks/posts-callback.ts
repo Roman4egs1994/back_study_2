@@ -64,7 +64,7 @@ export const updatePost = (req:Request , res:Response) => {
 
      const updatedPost = postRepository.update(post, {title, shortDescription, content, blogId})
 
-     return res.status(HttpStatuses.OK).send(updatedPost)
+     return res.status(HttpStatuses.NO_CONTENT).send(updatedPost)
 
 
 }
@@ -72,6 +72,6 @@ export const updatePost = (req:Request , res:Response) => {
 export const deletePost = (req:Request,res: Response) => {
     const {id} = req.params
     postRepository.delete(id as string)
-    return res.status(HttpStatuses.OK).send('Post deleted')
+    return res.status(HttpStatuses.NO_CONTENT).send('Post deleted')
 
 }

@@ -11,7 +11,7 @@ const superAdminGuardMiddleware = (req, res, next) => {
     }
     const [authType, token] = auth.split(' '); //admin:qwerty
     if (authType !== 'Basic') {
-        res.sendStatus(403);
+        res.sendStatus(401);
         return;
     }
     const credentials = Buffer.from(token, 'base64').toString('utf-8');

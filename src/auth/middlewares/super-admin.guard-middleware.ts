@@ -14,7 +14,7 @@ export const superAdminGuardMiddleware = (req: Request, res: Response, next: Nex
 
     const [authType, token] = auth.split(' '); //admin:qwerty
     if (authType !== 'Basic') {
-        res.sendStatus(403);
+        res.sendStatus(401);
         return;
     }
 

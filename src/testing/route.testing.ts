@@ -14,5 +14,5 @@ testingRoute.get('/', (req:Request, res: Response) => {
 testingRoute.delete('/all-data', (req:Request, res: Response) => {
     db_blogs.length = 0
     db_posts.length = 0
-    res.status(HttpStatuses.OK).send('All data deleted')
+    res.status(HttpStatuses.NO_CONTENT).send('All data deleted')
 })

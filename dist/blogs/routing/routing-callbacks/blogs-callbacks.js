@@ -37,7 +37,7 @@ const updateBlog = (req, res) => {
         return res.status(HttpStatuses_1.HttpStatuses.NOT_FOUND).send('Blog not found');
     }
     const updatedBlog = blogs_repositories_1.blogRepository.update(blog, { id: blog.id, name, description, websiteUrl });
-    return res.status(HttpStatuses_1.HttpStatuses.OK).send(updatedBlog);
+    return res.status(HttpStatuses_1.HttpStatuses.NO_CONTENT).send(updatedBlog);
 };
 exports.updateBlog = updateBlog;
 const deleteBlog = (req, res) => {
@@ -46,6 +46,6 @@ const deleteBlog = (req, res) => {
         return res.status(HttpStatuses_1.HttpStatuses.NOT_FOUND).send('Blog not found');
     }
     blogs_repositories_1.blogRepository.delete(req.params.id);
-    return res.status(HttpStatuses_1.HttpStatuses.OK).send('Blog deleted');
+    return res.status(HttpStatuses_1.HttpStatuses.NO_CONTENT).send('Blog deleted');
 };
 exports.deleteBlog = deleteBlog;

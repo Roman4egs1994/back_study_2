@@ -44,12 +44,12 @@ const updatePost = (req, res) => {
     }
     const { title, shortDescription, content, blogId } = req.body;
     const updatedPost = posts_repositories_1.postRepository.update(post, { title, shortDescription, content, blogId });
-    return res.status(HttpStatuses_1.HttpStatuses.OK).send(updatedPost);
+    return res.status(HttpStatuses_1.HttpStatuses.NO_CONTENT).send(updatedPost);
 };
 exports.updatePost = updatePost;
 const deletePost = (req, res) => {
     const { id } = req.params;
     posts_repositories_1.postRepository.delete(id);
-    return res.status(HttpStatuses_1.HttpStatuses.OK).send('Post deleted');
+    return res.status(HttpStatuses_1.HttpStatuses.NO_CONTENT).send('Post deleted');
 };
 exports.deletePost = deletePost;
