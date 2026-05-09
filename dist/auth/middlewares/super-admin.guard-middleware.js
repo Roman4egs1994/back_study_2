@@ -6,7 +6,7 @@ exports.ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || 'qwerty';
 const superAdminGuardMiddleware = (req, res, next) => {
     const auth = req.headers['authorization']; // 'Basic xxxx'
     if (!auth) {
-        res.sendStatus(403);
+        res.sendStatus(401);
         return;
     }
     const [authType, token] = auth.split(' '); //admin:qwerty
