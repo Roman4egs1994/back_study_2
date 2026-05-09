@@ -16,9 +16,14 @@ exports.postRepository = {
         db_1.db_posts.push(post);
     },
     update: (post, updateData) => {
-        post.shortDescription = updateData.shortDescription;
-        post.content = updateData.content;
-        post.blogId = updateData.blogId;
+        if (updateData.title !== undefined)
+            post.title = updateData.title;
+        if (updateData.shortDescription !== undefined)
+            post.shortDescription = updateData.shortDescription;
+        if (updateData.content !== undefined)
+            post.content = updateData.content;
+        if (updateData.blogId !== undefined)
+            post.blogId = updateData.blogId;
         return post;
     },
     delete: (postId) => {

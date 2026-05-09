@@ -20,9 +20,10 @@ export const postRepository = {
         db_posts.push(post)
     },
     update: (post: PostT, updateData: PostUpdateT) => {
-        post.shortDescription = updateData.shortDescription;
-        post.content = updateData.content;
-        post.blogId = updateData.blogId;
+        if (updateData.title !== undefined) post.title = updateData.title;
+        if (updateData.shortDescription !== undefined) post.shortDescription = updateData.shortDescription;
+        if (updateData.content !== undefined) post.content = updateData.content;
+        if (updateData.blogId !== undefined) post.blogId = updateData.blogId;
         return post;
     },
     delete: (postId: string) => {
