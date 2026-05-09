@@ -14,5 +14,5 @@ exports.testingRoute.get('/', (req, res) => {
 exports.testingRoute.delete('/all-data', (req, res) => {
     db_1.db_blogs.length = 0;
     db_1.db_posts.length = 0;
-    res.status(HttpStatuses_1.HttpStatuses.NO_CONTENT).send('All data deleted');
+    res.status(HttpStatuses_1.HttpStatuses.NO_CONTENT).send();
 });
