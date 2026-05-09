@@ -10,7 +10,7 @@ const validateResponse = (statusCode = HttpStatuses_1.HttpStatuses.BAD_REQUEST) 
             onlyFirstError: true
         });
         if (errors.length > 0) {
-            return res.status(statusCode).json({ errors });
+            return res.status(statusCode).json({ errorsMessages: errors });
         }
         next();
     };

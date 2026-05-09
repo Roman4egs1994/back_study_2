@@ -17,7 +17,7 @@ const superAdminGuardMiddleware = (req, res, next) => {
     const credentials = Buffer.from(token, 'base64').toString('utf-8');
     const [username, password] = credentials.split(':');
     if (username !== exports.ADMIN_USERNAME || password !== exports.ADMIN_PASSWORD) {
-        res.sendStatus(403);
+        res.sendStatus(401);
         return;
     }
     next();

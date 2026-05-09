@@ -13,7 +13,7 @@ export const validateResponse = (statusCode = HttpStatuses.BAD_REQUEST) => {
         });
 
         if (errors.length > 0) {
-            return res.status(statusCode).json({ errors });
+            return res.status(statusCode).json({ errorsMessages: errors });
         }
 
         next();

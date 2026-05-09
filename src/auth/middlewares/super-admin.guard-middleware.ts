@@ -22,7 +22,7 @@ export const superAdminGuardMiddleware = (req: Request, res: Response, next: Nex
     const [username, password] = credentials.split(':');
 
     if (username !== ADMIN_USERNAME || password !== ADMIN_PASSWORD) {
-        res.sendStatus(403);
+        res.sendStatus(401);
         return;
     }
 
