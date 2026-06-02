@@ -15,7 +15,7 @@ const HttpStatuses_1 = require("../../../core/middlewares/type/HttpStatuses");
 const deleteAllDataCallback = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         yield test_repositories_1.testRepositories.deleteAllData();
-        res.status(HttpStatuses_1.HttpStatuses.NO_CONTENT).send('All data deleted');
+        res.status(HttpStatuses_1.HttpStatuses.NO_CONTENT);
     }
     catch (e) {
     }
