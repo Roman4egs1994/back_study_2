@@ -12,7 +12,7 @@ const isValidationId_1 = require("../../core/middlewares/validations/isValidatio
 const super_admin_guard_middleware_1 = require("../../auth/middlewares/super-admin.guard-middleware");
 exports.routerPosts = express_1.default.Router();
 exports.routerPosts.get('/', posts_callback_1.getPosts);
-exports.routerPosts.post('/', super_admin_guard_middleware_1.superAdminGuardMiddleware, posts_validations_1.postsValidations, (0, validation_response_1.validateResponse)(), posts_callback_1.createPost);
+exports.routerPosts.post('/', super_admin_guard_middleware_1.superAdminGuardMiddleware, ...posts_validations_1.postsValidations, (0, validation_response_1.validateResponse)(), posts_callback_1.createPost);
 exports.routerPosts.get('/:id', isValidationId_1.idValidationParamId, (0, validation_response_1.validateResponse)(), posts_callback_1.getPostById);
-exports.routerPosts.put('/:id', isValidationId_1.idValidationParamId, super_admin_guard_middleware_1.superAdminGuardMiddleware, posts_validations_1.postsValidations, (0, validation_response_1.validateResponse)(), posts_callback_1.updatePost);
+exports.routerPosts.put('/:id', isValidationId_1.idValidationParamId, super_admin_guard_middleware_1.superAdminGuardMiddleware, ...posts_validations_1.postsValidations, (0, validation_response_1.validateResponse)(), posts_callback_1.updatePost);
 exports.routerPosts.delete('/:id', isValidationId_1.idValidationParamId, super_admin_guard_middleware_1.superAdminGuardMiddleware, (0, validation_response_1.validateResponse)(), posts_callback_1.deletePost);

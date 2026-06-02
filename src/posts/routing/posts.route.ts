@@ -12,11 +12,11 @@ export const routerPosts = express.Router();
 
 routerPosts.get('/', getPosts)
 
-routerPosts.post('/', superAdminGuardMiddleware, postsValidations, validateResponse(), createPost )
+routerPosts.post('/', superAdminGuardMiddleware, ...postsValidations, validateResponse(), createPost )
 
 routerPosts.get('/:id',idValidationParamId, validateResponse(), getPostById)
 
-routerPosts.put('/:id', idValidationParamId, superAdminGuardMiddleware, postsValidations, validateResponse(),updatePost)
+routerPosts.put('/:id', idValidationParamId, superAdminGuardMiddleware, ...postsValidations, validateResponse(),updatePost)
 
 routerPosts.delete('/:id',idValidationParamId, superAdminGuardMiddleware, validateResponse(), deletePost)
 
