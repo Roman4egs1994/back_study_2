@@ -22,3 +22,6 @@ routerBlogs.put("/:id",idValidationParamId, superAdminGuardMiddleware, blogsVali
 
 routerBlogs.delete("/:id",idValidationParamId, superAdminGuardMiddleware, validateResponse(), deleteBlog)
 
+
+
+
