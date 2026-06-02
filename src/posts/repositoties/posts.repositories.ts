@@ -1,32 +1,30 @@
-import {db_blogs, db_posts} from "../../db/db";
+import {db_posts} from "../../db/db";
 import {PostT, PostUpdateT} from "../../core/type/db.type";
+import { postsCollection} from "../../db/mongo.db";
+import {ObjectId} from "mongodb";
 
 
 
 export const postRepository = {
 
 
-    getAllPosts: () => {
-        return db_posts
+    getAllPosts: async (): Promise<PostT[]> => {
+        return await postsCollection.find().toArray()
     },
 
-    searchBlog: (blogId: string) => {
-        return db_blogs.find(b => b.id === blogId)
+    searchPost: async (postId: string): Promise<PostT | null> => {
+        return await postsCollection.findOne({ _id: new ObjectId(postId) })
     },
-    searchPost: (postId: string) => {
-        return db_posts.find(p => p.id === postId)
+    createPost: async (post: PostT) => {
+        const insertResult = await postsCollection.insertOne(post)
+        return {...post, _id: insertResult.insertedId}
     },
-    createPost: (post: PostT) => {
-        db_posts.push(post)
-    },
-    update: (post: PostT, updateData: PostUpdateT) => {
-        if (updateData.title !== undefined) post.title = updateData.title;
-        if (updateData.shortDescription !== undefined) post.shortDescription = updateData.shortDescription;
-        if (updateData.content !== undefined) post.content = updateData.content;
-        if (updateData.blogId !== undefined) post.blogId = updateData.blogId;
+    update: async (post: PostT, updateData: PostUpdateT) => {
+
         return post;
     },
     delete: (postId: string) => {
-        db_posts.splice(db_posts.findIndex(p => p.id === postId), 1);
+        // db_posts.splice(db_posts.findIndex(p => p.id === postId), 1);
+         postsCollection.deleteOne({ _id: new ObjectId(postId) })
     }
 }

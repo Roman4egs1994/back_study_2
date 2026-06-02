@@ -1,51 +1,80 @@
 "use strict";
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.deleteBlog = exports.updateBlog = exports.getByIdBlog = exports.createBlog = exports.getBlogs = void 0;
 const blogs_repositories_1 = require("../../repositories/blogs.repositories");
-const db_1 = require("../../../db/db");
 const HttpStatuses_1 = require("../../../core/middlewares/type/HttpStatuses");
-const getBlogs = (req, res) => {
-    return res.status(200).send(blogs_repositories_1.blogRepository.sendAllBlogs());
-};
+const getBlogs = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const allBlogs = yield blogs_repositories_1.blogRepository.sendAllBlogs();
+    return res.status(200).send(allBlogs);
+});
 exports.getBlogs = getBlogs;
-const createBlog = (req, res) => {
+const createBlog = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { name, description, websiteUrl } = req.body;
-    const id = db_1.db_blogs.length > 0 ? Number(db_1.db_blogs[db_1.db_blogs.length - 1].id) + 1 : 1;
     const addBlog = {
-        id: id.toString(),
         name,
         description,
-        websiteUrl
+        websiteUrl,
+        isMembership: false,
+        createdAt: new Date().toISOString(),
     };
-    blogs_repositories_1.blogRepository.createBlog(addBlog);
-    return res.status(HttpStatuses_1.HttpStatuses.CREATED).send(addBlog);
-};
+    const blog = yield blogs_repositories_1.blogRepository.createBlog(addBlog);
+    console.log(blog);
+    return res.status(HttpStatuses_1.HttpStatuses.CREATED).send(blog);
+});
 exports.createBlog = createBlog;
-const getByIdBlog = (req, res) => {
-    const { id } = req.params;
-    const blog = blogs_repositories_1.blogRepository.getById(id);
-    if (!blog) {
-        return res.status(HttpStatuses_1.HttpStatuses.NOT_FOUND).send('Blog not found');
+const getByIdBlog = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const { id } = req.params;
+        const blog = yield blogs_repositories_1.blogRepository.getById(id);
+        if (!blog) {
+            return res.status(HttpStatuses_1.HttpStatuses.NOT_FOUND).send('Blog not found');
+        }
+        return res.status(HttpStatuses_1.HttpStatuses.OK).send(blog);
     }
-    return res.status(HttpStatuses_1.HttpStatuses.OK).send(blog);
-};
+    catch (error) {
+        console.error('Error getting blog by ID:', error);
+        return res.status(HttpStatuses_1.HttpStatuses.INTERNAL_SERVER_ERROR).send('Server error');
+    }
+});
 exports.getByIdBlog = getByIdBlog;
-const updateBlog = (req, res) => {
+const updateBlog = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { name, description, websiteUrl } = req.body;
-    const blog = blogs_repositories_1.blogRepository.getById(req.params.id);
-    if (!blog) {
-        return res.status(HttpStatuses_1.HttpStatuses.NOT_FOUND).send('Blog not found');
+    try {
+        const blog = yield blogs_repositories_1.blogRepository.getById(req.params.id);
+        if (!blog) {
+            return res.status(HttpStatuses_1.HttpStatuses.NOT_FOUND).send('Blog not found');
+        }
+        const updatedBlog = yield blogs_repositories_1.blogRepository.update(req.params.id, { name, description, websiteUrl });
+        console.log(updatedBlog);
+        return res.status(HttpStatuses_1.HttpStatuses.NO_CONTENT).send(updatedBlog);
     }
-    const updatedBlog = blogs_repositories_1.blogRepository.update(blog, { id: blog.id, name, description, websiteUrl });
-    return res.status(HttpStatuses_1.HttpStatuses.NO_CONTENT).send(updatedBlog);
-};
+    catch (error) {
+        console.error('Error updating blog:', error);
+        return res.status(HttpStatuses_1.HttpStatuses.INTERNAL_SERVER_ERROR).send('Server error');
+    }
+});
 exports.updateBlog = updateBlog;
-const deleteBlog = (req, res) => {
-    const blog = blogs_repositories_1.blogRepository.getById(req.params.id);
-    if (!blog) {
-        return res.status(HttpStatuses_1.HttpStatuses.NOT_FOUND).send('Blog not found');
+const deleteBlog = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const blog = yield blogs_repositories_1.blogRepository.getById(req.params.id);
+        if (!blog) {
+            return res.status(HttpStatuses_1.HttpStatuses.NOT_FOUND).send('Blog not found');
+        }
+        yield blogs_repositories_1.blogRepository.delete(req.params.id);
+        return res.status(HttpStatuses_1.HttpStatuses.NO_CONTENT).send('Blog deleted');
     }
-    blogs_repositories_1.blogRepository.delete(req.params.id);
-    return res.status(HttpStatuses_1.HttpStatuses.NO_CONTENT).send('Blog deleted');
-};
+    catch (error) {
+        console.error('Error deleting blog:', error);
+        return res.status(HttpStatuses_1.HttpStatuses.INTERNAL_SERVER_ERROR).send('Server error');
+    }
+});
 exports.deleteBlog = deleteBlog;

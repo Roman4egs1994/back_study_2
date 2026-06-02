@@ -4,57 +4,76 @@ import {db_blogs} from "../../../db/db";
 import {BlogT} from "../../../core/type/db.type";
 import {HttpStatuses} from "../../../core/middlewares/type/HttpStatuses";
 
-export const getBlogs = (req:Request , res:Response) => {
- return res.status(200).send(blogRepository.sendAllBlogs())
+export const getBlogs =  async (req:Request , res:Response) => {
+    const allBlogs = await blogRepository.sendAllBlogs()
+
+    return res.status(200).send(allBlogs)
 }
 
-export const createBlog = (req:Request , res:Response) => {
+export const createBlog = async (req:Request , res:Response) => {
     const {name, description, websiteUrl} = req.body
 
-    const id = db_blogs.length > 0 ? Number(db_blogs[db_blogs.length - 1].id) + 1 : 1
+
     const addBlog: BlogT = {
-     id: id.toString(),
      name,
      description,
-     websiteUrl
+     websiteUrl,
+     isMembership: false,
+     createdAt: new Date().toISOString(),
     }
 
-    blogRepository.createBlog(addBlog)
-
-    return res.status(HttpStatuses.CREATED).send(addBlog)
+    const  blog = await blogRepository.createBlog(addBlog)
+    console.log(blog)
+    return res.status(HttpStatuses.CREATED).send(blog)
 
 }
 
 
-export const getByIdBlog = (req:Request,res:Response) => {
-    const {id} = req.params
+export const getByIdBlog = async (req:Request,res:Response) => {
 
-    const blog = blogRepository.getById(id as string)
+    try {
+        const {id} = req.params
 
-    if (!blog) {
-        return res.status(HttpStatuses.NOT_FOUND).send('Blog not found')
+        const blog = await blogRepository.getById(id as string)
+
+        if (!blog) {
+            return res.status(HttpStatuses.NOT_FOUND).send('Blog not found')
+        }
+        return res.status(HttpStatuses.OK).send(blog)
+    } catch (error) {
+        console.error('Error getting blog by ID:', error)
+        return res.status(HttpStatuses.INTERNAL_SERVER_ERROR).send('Server error')
     }
-    return res.status(HttpStatuses.OK).send(blog)
 }
 
-export const updateBlog = (req:Request,res:Response) => {
+export const updateBlog = async (req:Request,res:Response) => {
     const {name,description, websiteUrl} = req.body
+     try {
+         const blog = await blogRepository.getById(req.params.id as string)
+         if(!blog) {
+             return res.status(HttpStatuses.NOT_FOUND).send('Blog not found')
+         }
+         const updatedBlog = await blogRepository.update(req.params.id as string, { name, description, websiteUrl})
+         console.log(updatedBlog)
+         return res.status(HttpStatuses.NO_CONTENT).send(updatedBlog)
 
-    const blog = blogRepository.getById(req.params.id as string)
-    if(!blog) {
-        return res.status(HttpStatuses.NOT_FOUND).send('Blog not found')
+     } catch (error) {
+        console.error('Error updating blog:', error)
+        return res.status(HttpStatuses.INTERNAL_SERVER_ERROR).send('Server error')
     }
-    const updatedBlog = blogRepository.update(blog, {id: blog.id, name, description, websiteUrl})
-
-    return res.status(HttpStatuses.NO_CONTENT).send(updatedBlog)
 
 }
 
-export const deleteBlog = (req:Request,res:Response) => {
-     const blog = blogRepository.getById(req.params.id as string)
-     if(!blog) {
-        return res.status(HttpStatuses.NOT_FOUND).send('Blog not found')
+export const deleteBlog = async (req:Request,res:Response) => {
+     try {
+         const blog = await blogRepository.getById(req.params.id as string)
+         if(!blog) {
+            return res.status(HttpStatuses.NOT_FOUND).send('Blog not found')
+         }
+         await blogRepository.delete(req.params.id as string)
+         return res.status(HttpStatuses.NO_CONTENT).send('Blog deleted')
+     } catch (error) {
+        console.error('Error deleting blog:', error)
+        return res.status(HttpStatuses.INTERNAL_SERVER_ERROR).send('Server error')
      }
-     blogRepository.delete(req.params.id as string)
-     return res.status(HttpStatuses.NO_CONTENT).send('Blog deleted')
 }

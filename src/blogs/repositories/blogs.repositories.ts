@@ -1,29 +1,38 @@
-import {db_blogs} from "../../db/db";
-import {BlogT} from "../../core/type/db.type";
+
+import { BlogT} from "../../core/type/db.type";
+import {WithId, ObjectId} from "mongodb";
+import {blogsCollection} from "../../db/mongo.db";
 
 
 export const blogRepository = {
 
-    sendAllBlogs: () => {
-      return db_blogs
+   async sendAllBlogs ():Promise<WithId<BlogT>[]> {
+      return await blogsCollection.find().toArray()
     },
 
-    createBlog: (blog: BlogT) => {
-      db_blogs.push(blog)
+   async createBlog (blog: BlogT):Promise<WithId<BlogT>> {
+      const insertResult = await blogsCollection.insertOne(blog)
+      return {...blog, _id: insertResult.insertedId}
     },
 
-    getById: (id: string) => {
-      return db_blogs.find(blog => blog.id === id)
+   async getById (id: string):Promise<WithId<BlogT>> {
+       const blog = await blogsCollection.findOne({ _id: new ObjectId(id) })
+       return blog as WithId<BlogT>
     },
 
-    update: (blog:BlogT,dto: BlogT) => {
-       blog.name = dto.name
-       blog.description = dto.description
-       blog.websiteUrl = dto.websiteUrl
-       return blog
+  async update(id: string, dto: Omit<BlogT, 'createdAt' | 'isMembership'>): Promise<WithId<BlogT>> {
+       const updateResult = await
+           blogsCollection.updateOne({ _id: new ObjectId(id) },
+               { $set: dto })
+
+      if (!updateResult.matchedCount) {
+        throw new Error('Blog not found')
+      }
+
+      return await blogsCollection.findOne({ _id: new ObjectId(id) }) as WithId<BlogT>
     },
-    delete : (id: string) => {
-      db_blogs.splice(db_blogs.findIndex(blog => blog.id === id), 1)
+    async delete  (id: string): Promise<void> {
+       await blogsCollection.deleteOne({ _id: new ObjectId(id) })
     }
 
 }

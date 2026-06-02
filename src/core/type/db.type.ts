@@ -3,21 +3,23 @@
 
 
 export type BlogT = {
-    id: string,
     name: string,
     description: string,
     websiteUrl: string
+    createdAt: string
+    isMembership: false
 }
 
 export type BlogArrayT = Array<BlogT>
 
 export type PostT = {
-    id: string,
     title: string,
     shortDescription: string,
     blogId: string,
     content: string
     blogName: string
+    createdAt: string
+    isMembership: false
 }
 
 export type PostUpdateT = {

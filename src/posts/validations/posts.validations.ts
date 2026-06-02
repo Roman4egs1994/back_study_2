@@ -27,15 +27,12 @@ const contentValidation = body('content')
     .withMessage('Title must be between 1 and 1000 characters');
 
 const blogIdValidation = body('blogId')
-    .notEmpty()
-    .withMessage('Title is required')
+    .exists()
+    .withMessage('ID is required') // Проверка на наличие
     .isString()
-    .withMessage('Title must be a string')
-    .trim()
-
-
-
-
+    .withMessage('ID must be a string') // Проверка, что это строка
+    .isMongoId()
+    .withMessage('Incorrect format of ObjectId');
 
 
 export const postsValidations = [titleValidation,shortDescriptionValidation,contentValidation,blogIdValidation]

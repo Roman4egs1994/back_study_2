@@ -7,7 +7,7 @@ exports.setupApp = void 0;
 const express_1 = __importDefault(require("express"));
 const blogs_route_1 = require("./blogs/routing/blogs.route");
 const posts_route_1 = require("./posts/routing/posts.route");
-const route_testing_1 = require("./testing/route.testing");
+const route_testing_1 = require("./testing/routing/route.testing");
 const setupApp = (app) => {
     app.use(express_1.default.json());
     app.use(express_1.default.urlencoded({ extended: true }));

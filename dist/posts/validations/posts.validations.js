@@ -27,9 +27,10 @@ const contentValidation = (0, express_validator_1.body)('content')
     .isLength({ min: 1, max: 1000 })
     .withMessage('Title must be between 1 and 1000 characters');
 const blogIdValidation = (0, express_validator_1.body)('blogId')
-    .notEmpty()
-    .withMessage('Title is required')
+    .exists()
+    .withMessage('ID is required') // Проверка на наличие
     .isString()
-    .withMessage('Title must be a string')
-    .trim();
+    .withMessage('ID must be a string') // Проверка, что это строка
+    .isMongoId()
+    .withMessage('Incorrect format of ObjectId');
 exports.postsValidations = [titleValidation, shortDescriptionValidation, contentValidation, blogIdValidation];

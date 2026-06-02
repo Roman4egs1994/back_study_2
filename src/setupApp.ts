@@ -1,7 +1,7 @@
 import express, {Express} from "express";
 import {routerBlogs} from "./blogs/routing/blogs.route";
 import {routerPosts} from "./posts/routing/posts.route";
-import {testingRoute} from "./testing/route.testing";
+import {testingRoute} from "./testing/routing/route.testing";
 
 
 export const setupApp = (app: Express) => {
