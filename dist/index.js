@@ -19,14 +19,48 @@ const setupApp_1 = require("./setupApp");
 const settings_1 = require("./core/settings/settings");
 const mongo_db_1 = require("./db/mongo.db");
 dotenv_1.default.config();
-const bootstrap = () => __awaiter(void 0, void 0, void 0, function* () {
-    const app = (0, express_1.default)();
-    (0, setupApp_1.setupApp)(app);
-    const PORT = settings_1.SETTINGS.PORT;
-    yield (0, mongo_db_1.runDB)(settings_1.SETTINGS.MONGO_URL);
-    app.listen(PORT, () => {
-        console.log(`Server is running on port ${PORT}`);
+const app = (0, express_1.default)();
+let dbReady = null;
+const ensureDb = () => {
+    if (!dbReady) {
+        dbReady = (0, mongo_db_1.runDB)(settings_1.SETTINGS.MONGO_URL);
+    }
+    return dbReady;
+};
+app.use((_req, _res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        yield ensureDb();
+        next();
+    }
+    catch (e) {
+        next(e);
+    }
+}));
+(0, setupApp_1.setupApp)(app);
+if (!process.env.VERCEL) {
+    ensureDb()
+        .then(() => {
+        app.listen(settings_1.SETTINGS.PORT, () => {
+            console.log(`Server is running on port ${settings_1.SETTINGS.PORT}`);
+        });
+    })
+        .catch((err) => {
+        console.error('Failed to start server:', err);
     });
-    return app;
-});
-bootstrap().then(() => console.log('Server is ready'));
+}
+exports.default = app;
+// === Старый bootstrap (закомментирован, можно вернуть) ===
+// const bootstrap = async () => {
+//     const app = express();
+//     setupApp(app);
+//     const PORT = SETTINGS.PORT
+//
+//     await runDB(SETTINGS.MONGO_URL);
+//
+//     app.listen(PORT, () => {
+//         console.log(`Server is running on port ${PORT}`);
+//     });
+//  return app
+// }
+//
+// bootstrap().then(()=> console.log('Server is ready'))

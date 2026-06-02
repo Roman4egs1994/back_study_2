@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import {blogRepository} from "../../repositories/blogs.repositories";
-import {db_blogs} from "../../../db/db";
+// import {db_blogs} from "../../../db/db";
 import {BlogT} from "../../../core/type/db.type";
 import {HttpStatuses} from "../../../core/middlewares/type/HttpStatuses";
 

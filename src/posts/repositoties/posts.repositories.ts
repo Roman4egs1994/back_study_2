@@ -1,4 +1,4 @@
-import {db_posts} from "../../db/db";
+// import {db_posts} from "../../db/db";
 import {PostT, PostUpdateT} from "../../core/type/db.type";
 import { postsCollection} from "../../db/mongo.db";
 import {ObjectId} from "mongodb";
