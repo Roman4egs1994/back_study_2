@@ -14,11 +14,11 @@ export const routerBlogs = express.Router();
 
 routerBlogs.get("/",getBlogs)
 
-routerBlogs.post("/", superAdminGuardMiddleware, blogsValidations, validateResponse(), createBlog)
+routerBlogs.post("/", superAdminGuardMiddleware, ...blogsValidations, validateResponse(), createBlog)
 
 routerBlogs.get("/:id",idValidationParamId,validateResponse(), getByIdBlog)
 
-routerBlogs.put("/:id",idValidationParamId, superAdminGuardMiddleware, blogsValidations,validateResponse(), updateBlog)
+routerBlogs.put("/:id",idValidationParamId, superAdminGuardMiddleware, ...blogsValidations,validateResponse(), updateBlog)
 
 routerBlogs.delete("/:id",idValidationParamId, superAdminGuardMiddleware, validateResponse(), deleteBlog)
 
