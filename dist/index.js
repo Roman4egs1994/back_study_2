@@ -49,7 +49,7 @@ if (!process.env.VERCEL) {
     });
 }
 exports.default = app;
-// === Старый bootstrap (закомментирован, можно вернуть) ===
+//
 // const bootstrap = async () => {
 //     const app = express();
 //     setupApp(app);

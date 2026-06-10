@@ -44,7 +44,7 @@ export default app;
 
 
 
-// === Старый bootstrap (закомментирован, можно вернуть) ===
+//
 // const bootstrap = async () => {
 //     const app = express();
 //     setupApp(app);
