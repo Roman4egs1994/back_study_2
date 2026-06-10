@@ -24,7 +24,8 @@ exports.postRepository = {
         return Object.assign(Object.assign({}, post), { _id: insertResult.insertedId });
     }),
     update: (post, updateData) => __awaiter(void 0, void 0, void 0, function* () {
-        return post;
+        yield mongo_db_1.postsCollection.updateOne({ _id: post._id }, { $set: updateData });
+        return yield mongo_db_1.postsCollection.findOne({ _id: post._id });
     }),
     delete: (postId) => {
         // db_posts.splice(db_posts.findIndex(p => p.id === postId), 1);

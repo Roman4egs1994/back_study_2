@@ -5,8 +5,7 @@ import {PostT} from "../../../core/type/db.type";
 import {HttpStatuses} from "../../../core/middlewares/type/HttpStatuses";
 import {blogRepository} from "../../../blogs/repositories/blogs.repositories";
 import {PostUpdateT} from "../../../core/type/db.type";
-
-import {formatErrors} from "../../../core/middlewares/validations/formatErrors";
+import {createErrorResponse} from "../../../core/middlewares/validations/createErrorResponse";
 
 
 export const getPosts = async (req:Request , res:Response) => {
@@ -68,12 +67,9 @@ export const updatePost = async (req:Request , res:Response) => {
 
         const blog = await blogRepository.getById(blogId as string)
         if (!blog) {
-            return res.status(HttpStatuses.NOT_FOUND).send(formatErrors([
-                {
-                    field: 'blogId',
-                    message: 'Blog not found'
-                }
-            ]))
+            return res.status(HttpStatuses.NOT_FOUND).send(
+                createErrorResponse({ field: 'blogId', message: 'Blog not found' })
+            )
         }
 
         const {id} = req.params

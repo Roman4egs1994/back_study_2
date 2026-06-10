@@ -13,6 +13,7 @@ exports.deletePost = exports.updatePost = exports.getPostById = exports.createPo
 const posts_repositories_1 = require("../../repositoties/posts.repositories");
 const HttpStatuses_1 = require("../../../core/middlewares/type/HttpStatuses");
 const blogs_repositories_1 = require("../../../blogs/repositories/blogs.repositories");
+const createErrorResponse_1 = require("../../../core/middlewares/validations/createErrorResponse");
 const getPosts = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const posts = yield posts_repositories_1.postRepository.getAllPosts();
     return res.status(200).send(posts);
@@ -60,7 +61,7 @@ const updatePost = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
         const { title, shortDescription, content, blogId } = req.body;
         const blog = yield blogs_repositories_1.blogRepository.getById(blogId);
         if (!blog) {
-            return res.status(HttpStatuses_1.HttpStatuses.NOT_FOUND).send('Blog not found');
+            return res.status(HttpStatuses_1.HttpStatuses.NOT_FOUND).send((0, createErrorResponse_1.createErrorResponse)({ field: 'blogId', message: 'Blog not found' }));
         }
         const { id } = req.params;
         const post = yield posts_repositories_1.postRepository.searchPost(id);
