@@ -12,6 +12,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.deleteBlog = exports.updateBlog = exports.getByIdBlog = exports.createBlog = exports.getBlogs = void 0;
 const blogs_repositories_1 = require("../../repositories/blogs.repositories");
 const HttpStatuses_1 = require("../../../core/middlewares/type/HttpStatuses");
+const posts_repositories_1 = require("../../../posts/repositoties/posts.repositories");
 const getBlogs = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const allBlogs = yield blogs_repositories_1.blogRepository.sendAllBlogs();
     return res.status(200).send(allBlogs);
@@ -54,6 +55,7 @@ const updateBlog = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
             return res.status(HttpStatuses_1.HttpStatuses.NOT_FOUND).send('Blog not found');
         }
         const updatedBlog = yield blogs_repositories_1.blogRepository.update(req.params.id, { name, description, websiteUrl });
+        yield posts_repositories_1.postRepository.updateBlogName(req.params.id, name); //Обновление у всех постов  blogName
         console.log(updatedBlog);
         return res.status(HttpStatuses_1.HttpStatuses.NO_CONTENT).send(updatedBlog);
     }

@@ -1,8 +1,9 @@
 import { Request, Response } from 'express';
 import {blogRepository} from "../../repositories/blogs.repositories";
-// import {db_blogs} from "../../../db/db";
+
 import {BlogT} from "../../../core/type/db.type";
 import {HttpStatuses} from "../../../core/middlewares/type/HttpStatuses";
+import {postRepository} from "../../../posts/repositoties/posts.repositories";
 
 export const getBlogs =  async (req:Request , res:Response) => {
     const allBlogs = await blogRepository.sendAllBlogs()
@@ -54,6 +55,7 @@ export const updateBlog = async (req:Request,res:Response) => {
              return res.status(HttpStatuses.NOT_FOUND).send('Blog not found')
          }
          const updatedBlog = await blogRepository.update(req.params.id as string, { name, description, websiteUrl})
+         await postRepository.updateBlogName(req.params.id as string, name) //Обновление у всех постов  blogName
          console.log(updatedBlog)
          return res.status(HttpStatuses.NO_CONTENT).send(updatedBlog)
 

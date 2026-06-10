@@ -17,7 +17,7 @@ export type PostT = {
     shortDescription: string,
     blogId: string,
     content: string
-    blogName: string
+    blogName: string //нужно обновить если у блога имя обновляли
     createdAt: string
     isMembership: false
 }

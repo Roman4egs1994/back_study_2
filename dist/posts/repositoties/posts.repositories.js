@@ -27,6 +27,9 @@ exports.postRepository = {
         yield mongo_db_1.postsCollection.updateOne({ _id: post._id }, { $set: updateData });
         return yield mongo_db_1.postsCollection.findOne({ _id: post._id });
     }),
+    updateBlogName: (blogId, blogName) => __awaiter(void 0, void 0, void 0, function* () {
+        yield mongo_db_1.postsCollection.updateMany({ blogId }, { $set: { blogName } });
+    }),
     delete: (postId) => {
         // db_posts.splice(db_posts.findIndex(p => p.id === postId), 1);
         mongo_db_1.postsCollection.deleteOne({ _id: new mongodb_1.ObjectId(postId) });
