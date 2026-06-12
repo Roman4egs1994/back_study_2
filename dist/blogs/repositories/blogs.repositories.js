@@ -29,10 +29,7 @@ exports.blogRepository = {
     getById(id) {
         return __awaiter(this, void 0, void 0, function* () {
             const blog = yield mongo_db_1.blogsCollection.findOne({ _id: new mongodb_1.ObjectId(id) });
-            if (!blog) {
-                throw new Error('Blog not found');
-            }
-            return (0, mapToBlogs_1.mapToBlogs)(blog);
+            return blog ? (0, mapToBlogs_1.mapToBlogs)(blog) : null;
         });
     },
     update(id, dto) {

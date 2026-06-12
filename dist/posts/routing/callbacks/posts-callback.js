@@ -74,13 +74,13 @@ const updatePost = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
     }
 });
 exports.updatePost = updatePost;
-const deletePost = (req, res) => {
+const deletePost = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { id } = req.params;
-    const post = posts_repositories_1.postRepository.searchPost(id);
+    const post = yield posts_repositories_1.postRepository.searchPost(id);
     if (!post) {
         return res.status(HttpStatuses_1.HttpStatuses.NOT_FOUND).send('Post not found');
     }
-    posts_repositories_1.postRepository.delete(id);
+    yield posts_repositories_1.postRepository.delete(id);
     return res.status(HttpStatuses_1.HttpStatuses.NO_CONTENT).send();
-};
+});
 exports.deletePost = deletePost;

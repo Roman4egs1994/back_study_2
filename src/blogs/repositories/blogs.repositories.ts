@@ -16,12 +16,9 @@ export const blogRepository = {
        return mapToBlogs({_id: insertResult.insertedId, ...blog})
     },
 
-   async getById (id: string):Promise<BlogModelT> {
+   async getById (id: string):Promise<BlogModelT | null> {
        const blog = await blogsCollection.findOne({ _id: new ObjectId(id) })
-       if (!blog) {
-         throw new Error('Blog not found')
-       }
-       return mapToBlogs(blog)
+       return blog ? mapToBlogs(blog) : null
     },
 
   async update(id: string, dto: Omit<BlogDBT, '_id' | 'createdAt' | 'isMembership'>): Promise<BlogModelT> {

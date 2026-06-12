@@ -84,15 +84,14 @@ export const updatePost = async (req:Request , res:Response) => {
 
 }
 
-export const deletePost = (req:Request,res: Response) => {
+export const deletePost = async (req:Request,res: Response) => {
     const {id} = req.params
-    
-    const post = postRepository.searchPost(id as string)
+
+    const post = await postRepository.searchPost(id as string)
     if (!post) {
         return res.status(HttpStatuses.NOT_FOUND).send('Post not found')
     }
-    
-    postRepository.delete(id as string)
-    return res.status(HttpStatuses.NO_CONTENT).send()
 
+    await postRepository.delete(id as string)
+    return res.status(HttpStatuses.NO_CONTENT).send()
 }

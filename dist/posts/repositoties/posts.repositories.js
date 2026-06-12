@@ -34,7 +34,7 @@ exports.postRepository = {
     updateBlogName: (blogId, blogName) => __awaiter(void 0, void 0, void 0, function* () {
         yield mongo_db_1.postsCollection.updateMany({ blogId }, { $set: { blogName } });
     }),
-    delete: (postId) => {
-        mongo_db_1.postsCollection.deleteOne({ _id: new mongodb_1.ObjectId(postId) });
-    }
+    delete: (postId) => __awaiter(void 0, void 0, void 0, function* () {
+        yield mongo_db_1.postsCollection.deleteOne({ _id: new mongodb_1.ObjectId(postId) });
+    })
 };

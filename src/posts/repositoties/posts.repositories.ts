@@ -33,7 +33,7 @@ export const postRepository = {
         await postsCollection.updateMany({ blogId }, { $set: { blogName } })
     },
 
-    delete: (postId: string) => {
-        postsCollection.deleteOne({ _id: new ObjectId(postId) })
+    delete: async (postId: string): Promise<void> => {
+        await postsCollection.deleteOne({ _id: new ObjectId(postId) })
     }
 }
