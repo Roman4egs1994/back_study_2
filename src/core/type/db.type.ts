@@ -1,16 +1,7 @@
+import {BlogDBT} from "../../blogs/types/blog.type";
 
 
-
-
-export type BlogT = {
-    name: string,
-    description: string,
-    websiteUrl: string
-    createdAt: string
-    isMembership: false
-}
-
-export type BlogArrayT = Array<BlogT>
+export type BlogArrayT = Array<BlogDBT>
 
 export type PostT = {
     title: string,

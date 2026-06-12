@@ -8,9 +8,9 @@ export const deleteAllDataCallback = async (req:Request, res:Response) => {
    try {
 
        await testRepositories.deleteAllData()
-       res.status(HttpStatuses.NO_CONTENT)
+       res.status(HttpStatuses.NO_CONTENT).send()
    } catch (e) {
-
+       res.status(HttpStatuses.INTERNAL_SERVER_ERROR).send()
    }
 
 

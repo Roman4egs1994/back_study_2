@@ -1,6 +1,7 @@
 import {Collection, MongoClient} from "mongodb";
 import {SETTINGS} from "../core/settings/settings";
-import {BlogT, PostT} from "../core/type/db.type";
+import { PostT} from "../core/type/db.type";
+import {BlogDBT} from "../blogs/types/blog.type";
 
 const BLOGS_COLLECTION_NAME = 'blogs';
 const POSTS_COLLECTION_NAME = 'posts';
@@ -8,7 +9,7 @@ const POSTS_COLLECTION_NAME = 'posts';
 
 
 export let client : MongoClient
-export let blogsCollection: Collection<BlogT>
+export let blogsCollection: Collection<BlogDBT>
 export let postsCollection: Collection<PostT>
 
 export async function runDB(url: string): Promise<void> {

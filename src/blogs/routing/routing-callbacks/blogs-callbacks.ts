@@ -1,9 +1,10 @@
 import { Request, Response } from 'express';
 import {blogRepository} from "../../repositories/blogs.repositories";
 
-import {BlogT} from "../../../core/type/db.type";
+
 import {HttpStatuses} from "../../../core/middlewares/type/HttpStatuses";
 import {postRepository} from "../../../posts/repositoties/posts.repositories";
+import {BlogDBT} from "../../types/blog.type";
 
 export const getBlogs =  async (req:Request , res:Response) => {
     const allBlogs = await blogRepository.sendAllBlogs()
@@ -15,7 +16,7 @@ export const createBlog = async (req:Request , res:Response) => {
     const {name, description, websiteUrl} = req.body
 
 
-    const addBlog: BlogT = {
+    const addBlog: Omit<BlogDBT, "_id"> = {
      name,
      description,
      websiteUrl,

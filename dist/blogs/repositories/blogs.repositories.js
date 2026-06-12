@@ -12,22 +12,27 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.blogRepository = void 0;
 const mongodb_1 = require("mongodb");
 const mongo_db_1 = require("../../db/mongo.db");
+const mapToBlogs_1 = require("../utils/mapToBlogs");
 exports.blogRepository = {
     sendAllBlogs() {
         return __awaiter(this, void 0, void 0, function* () {
-            return yield mongo_db_1.blogsCollection.find().toArray();
+            const blogs = yield mongo_db_1.blogsCollection.find().toArray();
+            return blogs.map(mapToBlogs_1.mapToBlogs);
         });
     },
     createBlog(blog) {
         return __awaiter(this, void 0, void 0, function* () {
             const insertResult = yield mongo_db_1.blogsCollection.insertOne(blog);
-            return Object.assign(Object.assign({}, blog), { _id: insertResult.insertedId });
+            return (0, mapToBlogs_1.mapToBlogs)(Object.assign({ _id: insertResult.insertedId }, blog));
         });
     },
     getById(id) {
         return __awaiter(this, void 0, void 0, function* () {
             const blog = yield mongo_db_1.blogsCollection.findOne({ _id: new mongodb_1.ObjectId(id) });
-            return blog;
+            if (!blog) {
+                throw new Error('Blog not found');
+            }
+            return (0, mapToBlogs_1.mapToBlogs)(blog);
         });
     },
     update(id, dto) {
@@ -36,12 +41,12 @@ exports.blogRepository = {
             if (!updateResult.matchedCount) {
                 throw new Error('Blog not found');
             }
-            return yield mongo_db_1.blogsCollection.findOne({ _id: new mongodb_1.ObjectId(id) });
+            return yield (0, mapToBlogs_1.mapToBlogs)(mongo_db_1.blogsCollection.findOne({ _id: new mongodb_1.ObjectId(id) }));
         });
     },
     delete(id) {
         return __awaiter(this, void 0, void 0, function* () {
-            yield mongo_db_1.blogsCollection.deleteOne({ _id: new mongodb_1.ObjectId(id) });
+            return yield mongo_db_1.blogsCollection.deleteOne({ _id: new mongodb_1.ObjectId(id) });
         });
     }
 };
