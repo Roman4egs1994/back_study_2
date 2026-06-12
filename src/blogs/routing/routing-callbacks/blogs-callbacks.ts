@@ -54,8 +54,10 @@ export const updateBlog = async (req:Request,res:Response) => {
          if(!blog) {
              return res.status(HttpStatuses.NOT_FOUND).send('Blog not found')
          }
+
          const updatedBlog = await blogRepository.update(req.params.id as string, { name, description, websiteUrl})
          await postRepository.updateBlogName(req.params.id as string, name) //Обновление у всех постов  blogName
+
          console.log(updatedBlog)
          return res.status(HttpStatuses.NO_CONTENT).send(updatedBlog)
 
