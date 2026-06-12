@@ -33,7 +33,7 @@ const createPost = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
             blogId,
             blogName: blog.name,
             createdAt: new Date().toISOString(),
-            isMembership: false
+            // isMembership: false
         };
         const post = yield posts_repositories_1.postRepository.createPost(newPost);
         return res.status(HttpStatuses_1.HttpStatuses.CREATED).send(post);

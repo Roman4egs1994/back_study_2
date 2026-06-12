@@ -31,7 +31,7 @@ export const createPost = async (req:Request , res:Response) => {
             blogId,
             blogName: blog.name,
             createdAt: new Date().toISOString(),
-            isMembership: false
+            // isMembership: false
         }
 
         const post = await postRepository.createPost(newPost)
@@ -56,9 +56,6 @@ export const getPostById = async (req:Request , res:Response) => {
    } catch (e) {
 
    }
-
-
-
 }
 
 export const updatePost = async (req:Request , res:Response) => {

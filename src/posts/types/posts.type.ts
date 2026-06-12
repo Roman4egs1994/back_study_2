@@ -8,7 +8,7 @@ export type PostModelT = {
     content: string
     blogName: string //нужно обновить если у блога имя обновляли
     createdAt: string
-    isMembership: false
+    // isMembership: false
 }
 
 export type PostBDType = {
@@ -19,7 +19,7 @@ export type PostBDType = {
     content: string
     blogName: string
     createdAt: string
-    isMembership: false
+    // isMembership: false
 }
 
 export type PostUpdateT = {

@@ -2,7 +2,7 @@ import {PostBDType, PostModelT} from "../types/posts.type";
 
 
 export const mapToPost = (post: PostBDType): PostModelT => {
-    const {_id, title, shortDescription, blogId, content, blogName, createdAt, isMembership} = post
+    const {_id, title, shortDescription, blogId, content, blogName, createdAt} = post
 
     return {
         id: _id.toString(),
@@ -12,6 +12,5 @@ export const mapToPost = (post: PostBDType): PostModelT => {
         content,
         blogName,
         createdAt,
-        isMembership
     }
 }

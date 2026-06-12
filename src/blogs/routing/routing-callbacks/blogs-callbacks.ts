@@ -76,7 +76,7 @@ export const deleteBlog = async (req:Request,res:Response) => {
             return res.status(HttpStatuses.NOT_FOUND).send('Blog not found')
          }
          await blogRepository.delete(req.params.id as string)
-         return res.status(HttpStatuses.NO_CONTENT).send('Blog deleted')
+         return res.status(HttpStatuses.NOT_FOUND).send('Blog deleted')
      } catch (error) {
         console.error('Error deleting blog:', error)
         return res.status(HttpStatuses.INTERNAL_SERVER_ERROR).send('Server error')

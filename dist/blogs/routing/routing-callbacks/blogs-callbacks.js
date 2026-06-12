@@ -72,7 +72,7 @@ const deleteBlog = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
             return res.status(HttpStatuses_1.HttpStatuses.NOT_FOUND).send('Blog not found');
         }
         yield blogs_repositories_1.blogRepository.delete(req.params.id);
-        return res.status(HttpStatuses_1.HttpStatuses.NO_CONTENT).send('Blog deleted');
+        return res.status(HttpStatuses_1.HttpStatuses.NOT_FOUND).send('Blog deleted');
     }
     catch (error) {
         console.error('Error deleting blog:', error);
