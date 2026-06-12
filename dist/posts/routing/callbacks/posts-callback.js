@@ -36,7 +36,6 @@ const createPost = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
             isMembership: false
         };
         const post = yield posts_repositories_1.postRepository.createPost(newPost);
-        console.log(post);
         return res.status(HttpStatuses_1.HttpStatuses.CREATED).send(post);
     }
     catch (e) {
@@ -68,7 +67,7 @@ const updatePost = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
         if (!post) {
             return res.status(HttpStatuses_1.HttpStatuses.NOT_FOUND).send('Post not found');
         }
-        const updatedPost = yield posts_repositories_1.postRepository.update(post, { title, shortDescription, content, blogId });
+        const updatedPost = yield posts_repositories_1.postRepository.update(id, { title, shortDescription, content, blogId });
         return res.status(HttpStatuses_1.HttpStatuses.NO_CONTENT).send(updatedPost);
     }
     catch (e) {

@@ -41,12 +41,13 @@ exports.blogRepository = {
             if (!updateResult.matchedCount) {
                 throw new Error('Blog not found');
             }
-            return yield (0, mapToBlogs_1.mapToBlogs)(mongo_db_1.blogsCollection.findOne({ _id: new mongodb_1.ObjectId(id) }));
+            const updated = yield mongo_db_1.blogsCollection.findOne({ _id: new mongodb_1.ObjectId(id) });
+            return (0, mapToBlogs_1.mapToBlogs)(updated);
         });
     },
     delete(id) {
         return __awaiter(this, void 0, void 0, function* () {
-            return yield mongo_db_1.blogsCollection.deleteOne({ _id: new mongodb_1.ObjectId(id) });
+            yield mongo_db_1.blogsCollection.deleteOne({ _id: new mongodb_1.ObjectId(id) });
         });
     }
 };

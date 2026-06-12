@@ -1,33 +1,39 @@
-// import {db_posts} from "../../db/db";
-import {PostT, PostUpdateT} from "../../core/type/db.type";
 import { postsCollection} from "../../db/mongo.db";
-import {ObjectId, WithId} from "mongodb";
+import {ObjectId} from "mongodb";
+import {PostModelT, PostUpdateT} from "../types/posts.type";
+import {mapToPost} from "../utils/mapToPost";
+import {PostBDType} from "../types/posts.type";
 
 
 
 export const postRepository = {
 
-
-    getAllPosts: async (): Promise<PostT[]> => {
-        return await postsCollection.find().toArray()
+    getAllPosts: async (): Promise<PostModelT[]> => {
+        const posts = await postsCollection.find().toArray()
+        return posts.map(mapToPost)
     },
 
-    searchPost: async (postId: string): Promise<WithId<PostT> | null> => {
-        return await postsCollection.findOne({ _id: new ObjectId(postId) })
+    searchPost: async (postId: string): Promise<PostModelT | null> => {
+        const post = await postsCollection.findOne({ _id: new ObjectId(postId) })
+        return post ? mapToPost(post) : null
     },
-    createPost: async (post: PostT) => {
-        const insertResult = await postsCollection.insertOne(post)
-        return {...post, _id: insertResult.insertedId}
+
+    createPost: async (post: Omit<PostBDType, '_id'>): Promise<PostModelT> => {
+        const insertResult = await postsCollection.insertOne(post as PostBDType)
+        return mapToPost({...post, _id: insertResult.insertedId})
     },
-    update: async (post: PostT & { _id: ObjectId }, updateData: PostUpdateT) => {
-        await postsCollection.updateOne({ _id: post._id }, { $set: updateData })
-        return await postsCollection.findOne({ _id: post._id })
+
+    update: async (id: string, updateData: PostUpdateT): Promise<PostModelT | null> => {
+        await postsCollection.updateOne({ _id: new ObjectId(id) }, { $set: updateData })
+        const updated = await postsCollection.findOne({ _id: new ObjectId(id) })
+        return updated ? mapToPost(updated) : null
     },
+
     updateBlogName: async (blogId: string, blogName: string) => {
         await postsCollection.updateMany({ blogId }, { $set: { blogName } })
     },
+
     delete: (postId: string) => {
-        // db_posts.splice(db_posts.findIndex(p => p.id === postId), 1);
-         postsCollection.deleteOne({ _id: new ObjectId(postId) })
+        postsCollection.deleteOne({ _id: new ObjectId(postId) })
     }
 }

@@ -1,11 +1,11 @@
 
 import {Request, Response} from "express";
 import {postRepository} from "../../repositoties/posts.repositories";
-import {PostT} from "../../../core/type/db.type";
 import {HttpStatuses} from "../../../core/middlewares/type/HttpStatuses";
 import {blogRepository} from "../../../blogs/repositories/blogs.repositories";
-import {PostUpdateT} from "../../../core/type/db.type";
+
 import {createErrorResponse} from "../../../core/middlewares/validations/createErrorResponse";
+import {PostBDType, PostModelT, PostUpdateT} from "../../types/posts.type";
 
 
 export const getPosts = async (req:Request , res:Response) => {
@@ -24,7 +24,7 @@ export const createPost = async (req:Request , res:Response) => {
             return res.status(HttpStatuses.NOT_FOUND).send('Blog not found')
         }
 
-        const newPost: PostT = {
+        const newPost: Omit<PostBDType, '_id'> = {
             title,
             shortDescription,
             content,
@@ -35,7 +35,7 @@ export const createPost = async (req:Request , res:Response) => {
         }
 
         const post = await postRepository.createPost(newPost)
-        console.log(post)
+
         return res.status(HttpStatuses.CREATED).send(post)
 
     } catch (e) {
@@ -78,7 +78,7 @@ export const updatePost = async (req:Request , res:Response) => {
             return res.status(HttpStatuses.NOT_FOUND).send('Post not found')
         }
 
-        const updatedPost = await postRepository.update(post, {title, shortDescription, content, blogId})
+        const updatedPost = await postRepository.update(id as string, {title, shortDescription, content, blogId})
 
         return res.status(HttpStatuses.NO_CONTENT).send(updatedPost)
     } catch (e) {

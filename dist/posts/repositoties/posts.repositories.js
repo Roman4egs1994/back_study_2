@@ -12,26 +12,29 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.postRepository = void 0;
 const mongo_db_1 = require("../../db/mongo.db");
 const mongodb_1 = require("mongodb");
+const mapToPost_1 = require("../utils/mapToPost");
 exports.postRepository = {
     getAllPosts: () => __awaiter(void 0, void 0, void 0, function* () {
-        return yield mongo_db_1.postsCollection.find().toArray();
+        const posts = yield mongo_db_1.postsCollection.find().toArray();
+        return posts.map(mapToPost_1.mapToPost);
     }),
     searchPost: (postId) => __awaiter(void 0, void 0, void 0, function* () {
-        return yield mongo_db_1.postsCollection.findOne({ _id: new mongodb_1.ObjectId(postId) });
+        const post = yield mongo_db_1.postsCollection.findOne({ _id: new mongodb_1.ObjectId(postId) });
+        return post ? (0, mapToPost_1.mapToPost)(post) : null;
     }),
     createPost: (post) => __awaiter(void 0, void 0, void 0, function* () {
         const insertResult = yield mongo_db_1.postsCollection.insertOne(post);
-        return Object.assign(Object.assign({}, post), { _id: insertResult.insertedId });
+        return (0, mapToPost_1.mapToPost)(Object.assign(Object.assign({}, post), { _id: insertResult.insertedId }));
     }),
-    update: (post, updateData) => __awaiter(void 0, void 0, void 0, function* () {
-        yield mongo_db_1.postsCollection.updateOne({ _id: post._id }, { $set: updateData });
-        return yield mongo_db_1.postsCollection.findOne({ _id: post._id });
+    update: (id, updateData) => __awaiter(void 0, void 0, void 0, function* () {
+        yield mongo_db_1.postsCollection.updateOne({ _id: new mongodb_1.ObjectId(id) }, { $set: updateData });
+        const updated = yield mongo_db_1.postsCollection.findOne({ _id: new mongodb_1.ObjectId(id) });
+        return updated ? (0, mapToPost_1.mapToPost)(updated) : null;
     }),
     updateBlogName: (blogId, blogName) => __awaiter(void 0, void 0, void 0, function* () {
         yield mongo_db_1.postsCollection.updateMany({ blogId }, { $set: { blogName } });
     }),
     delete: (postId) => {
-        // db_posts.splice(db_posts.findIndex(p => p.id === postId), 1);
         mongo_db_1.postsCollection.deleteOne({ _id: new mongodb_1.ObjectId(postId) });
     }
 };

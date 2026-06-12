@@ -6,7 +6,7 @@ export const mapToBlogs = (blog: BlogDBT): BlogModelT => {
     const {_id, name, description, websiteUrl, createdAt, isMembership} = blog
 
     return {
-        id: _id,
+        id: _id.toString(),
         name,
         description,
         websiteUrl,

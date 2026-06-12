@@ -1,8 +1,7 @@
-import {BlogT} from "../../core/type/db.type";
-import {ObjectId, WithId} from "mongodb";
+import {ObjectId} from "mongodb";
 import {blogsCollection} from "../../db/mongo.db";
 import {mapToBlogs} from "../utils/mapToBlogs";
-import {BlogModelT} from "../types/blog.type";
+import {BlogDBT, BlogModelT} from "../types/blog.type";
 
 
 export const blogRepository = {
@@ -12,8 +11,8 @@ export const blogRepository = {
        return blogs.map(mapToBlogs)
     },
 
-   async createBlog (blog: BlogT):Promise<WithId<BlogT>> {
-       const insertResult = await blogsCollection.insertOne(blog)
+   async createBlog (blog: Omit<BlogDBT, '_id'>):Promise<BlogModelT> {
+       const insertResult = await blogsCollection.insertOne(blog as BlogDBT)
        return mapToBlogs({_id: insertResult.insertedId, ...blog})
     },
 
@@ -25,19 +24,22 @@ export const blogRepository = {
        return mapToBlogs(blog)
     },
 
-  async update(id: string, dto: Omit<BlogT, 'createdAt' | 'isMembership'>): Promise<BlogModelT> {
-       const updateResult = await
-           blogsCollection.updateOne({ _id: new ObjectId(id) },
-               { $set: dto })
+  async update(id: string, dto: Omit<BlogDBT, '_id' | 'createdAt' | 'isMembership'>): Promise<BlogModelT> {
+       const updateResult = await blogsCollection.updateOne(
+           { _id: new ObjectId(id) },
+           { $set: dto }
+       )
 
       if (!updateResult.matchedCount) {
         throw new Error('Blog not found')
       }
 
-      return await mapToBlogs(blogsCollection.findOne({ _id: new ObjectId(id) }))
+      const updated = await blogsCollection.findOne({ _id: new ObjectId(id) })
+      return mapToBlogs(updated!)
     },
-    async delete  (id: string): Promise<void> {
-      return  await blogsCollection.deleteOne({ _id: new ObjectId(id) })
+
+    async delete(id: string): Promise<void> {
+      await blogsCollection.deleteOne({ _id: new ObjectId(id) })
     }
 
 }
