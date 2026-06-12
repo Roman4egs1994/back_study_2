@@ -2,26 +2,30 @@ import {ObjectId} from "mongodb";
 import {blogsCollection} from "../../db/mongo.db";
 import {mapToBlogs} from "../utils/mapToBlogs";
 import {BlogDBT, BlogModelT} from "../types/blog.type";
+import {RepositoryNotFoundError} from "../../core/errors/repository-not-found";
 
 
 export const blogRepository = {
 
-   async sendAllBlogs ():Promise<BlogModelT[]> {
+   async sendAllBlogs ():Promise<BlogDBT[]> {
        const blogs = await blogsCollection.find().toArray()
-       return blogs.map(mapToBlogs)
+       return blogs
     },
 
-   async createBlog (blog: Omit<BlogDBT, '_id'>):Promise<BlogModelT> {
+   async createBlog (blog: Omit<BlogDBT, '_id'>):Promise<BlogDBT> {
        const insertResult = await blogsCollection.insertOne(blog as BlogDBT)
-       return mapToBlogs({_id: insertResult.insertedId, ...blog})
+       return {_id: insertResult.insertedId, ...blog}
     },
 
-   async getById (id: string):Promise<BlogModelT | null> {
+   async findByIdBlogOrFail (id: string):Promise<BlogDBT> {
        const blog = await blogsCollection.findOne({ _id: new ObjectId(id) })
-       return blog ? mapToBlogs(blog) : null
+       if(!blog) {
+           throw new RepositoryNotFoundError("Blog not found")
+       }
+       return blog
     },
 
-  async update(id: string, dto: Omit<BlogDBT, '_id' | 'createdAt' | 'isMembership'>): Promise<BlogModelT> {
+  async update(id: string, dto: Omit<BlogDBT, '_id' | 'createdAt' | 'isMembership'>): Promise<BlogDBT> {
        const updateResult = await blogsCollection.updateOne(
            { _id: new ObjectId(id) },
            { $set: dto }
@@ -32,7 +36,7 @@ export const blogRepository = {
       }
 
       const updated = await blogsCollection.findOne({ _id: new ObjectId(id) })
-      return mapToBlogs(updated!)
+      return updated!
     },
 
     async delete(id: string): Promise<void> {

@@ -22,7 +22,7 @@ exports.getPosts = getPosts;
 const createPost = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const { title, shortDescription, content, blogId } = req.body;
-        const blog = yield blogs_repositories_1.blogRepository.getById(blogId);
+        const blog = yield blogs_repositories_1.blogRepository.findByIdBlogOrFail(blogId);
         if (!blog) {
             return res.status(HttpStatuses_1.HttpStatuses.NOT_FOUND).send('Blog not found');
         }
@@ -58,9 +58,9 @@ exports.getPostById = getPostById;
 const updatePost = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const { title, shortDescription, content, blogId } = req.body;
-        const blog = yield blogs_repositories_1.blogRepository.getById(blogId);
+        const blog = yield blogs_repositories_1.blogRepository.findByIdBlogOrFail(blogId);
         if (!blog) {
-            return res.status(HttpStatuses_1.HttpStatuses.NOT_FOUND).send((0, createErrorResponse_1.createErrorResponse)({ field: 'blogId', message: 'Blog not found' }));
+            return res.status(HttpStatuses_1.HttpStatuses.NOT_FOUND).send((0, createErrorResponse_1.createErrorResponse)({ field: 'blogId', detail: 'Blog not found', status: HttpStatuses_1.HttpStatuses.NOT_FOUND }));
         }
         const { id } = req.params;
         const post = yield posts_repositories_1.postRepository.searchPost(id);

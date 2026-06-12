@@ -5,7 +5,7 @@ import {HttpStatuses} from "../../../core/middlewares/type/HttpStatuses";
 import {blogRepository} from "../../../blogs/repositories/blogs.repositories";
 
 import {createErrorResponse} from "../../../core/middlewares/validations/createErrorResponse";
-import {PostBDType, PostModelT, PostUpdateT} from "../../types/posts.type";
+import {PostBDType,  PostUpdateT} from "../../types/posts.type";
 
 
 export const getPosts = async (req:Request , res:Response) => {
@@ -18,7 +18,7 @@ export const createPost = async (req:Request , res:Response) => {
 
     try {
         const {title, shortDescription, content, blogId} = req.body
-        const blog =  await blogRepository.getById(blogId)
+        const blog =  await blogRepository.findByIdBlogOrFail(blogId)
 
         if (!blog) {
             return res.status(HttpStatuses.NOT_FOUND).send('Blog not found')
@@ -62,10 +62,10 @@ export const updatePost = async (req:Request , res:Response) => {
     try {
         const {title, shortDescription, content, blogId} = req.body as PostUpdateT
 
-        const blog = await blogRepository.getById(blogId as string)
+        const blog = await blogRepository.findByIdBlogOrFail(blogId as string)
         if (!blog) {
             return res.status(HttpStatuses.NOT_FOUND).send(
-                createErrorResponse({ field: 'blogId', message: 'Blog not found' })
+                createErrorResponse({ field: 'blogId', detail: 'Blog not found', status: HttpStatuses.NOT_FOUND })
             )
         }
 
