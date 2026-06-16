@@ -1,6 +1,9 @@
 import {blogRepository} from "../../repositories/blogs.repositories";
-import {BlogDBT, BlogModelT} from "../../types/blog.type";
+import {BlogDBT, BlogQueryResponse} from "../../types/blog.type";
 import {postRepository} from "../../../posts/repositoties/posts.repositories";
+import {BlogQueryInput} from "../../routing/inputs";
+import {mapToBlogsQueryResponse} from "../../utils/mapToBlogs";
+
 
 
 export const blogsService = {
@@ -20,9 +23,11 @@ export const blogsService = {
       const updated = await blogRepository.update(id, dto)
       await postRepository.updateBlogName(id, dto.name)
       return updated
-  }
+  },
 
-
+  findArrayBlogsService: async (queryDto: BlogQueryInput): Promise<BlogQueryResponse> => {
+      const { items, totalCount } = await blogRepository.findMany(queryDto)
+      return mapToBlogsQueryResponse(items, totalCount, queryDto)
+  },
 
 }
-

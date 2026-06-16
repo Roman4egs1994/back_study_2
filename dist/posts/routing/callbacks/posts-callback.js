@@ -9,16 +9,16 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deletePost = exports.updatePost = exports.getPostById = exports.createPost = exports.getPosts = void 0;
+exports.deletePost = exports.updatePost = exports.getPostById = exports.createPost = void 0;
 const posts_repositories_1 = require("../../repositoties/posts.repositories");
 const HttpStatuses_1 = require("../../../core/middlewares/type/HttpStatuses");
 const blogs_repositories_1 = require("../../../blogs/repositories/blogs.repositories");
 const createErrorResponse_1 = require("../../../core/middlewares/validations/createErrorResponse");
-const getPosts = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const posts = yield posts_repositories_1.postRepository.getAllPosts();
-    return res.status(200).send(posts);
-});
-exports.getPosts = getPosts;
+// export const getPosts = async (req:Request , res:Response) => {
+//
+//     const posts = await postRepository.getAllPosts()
+//     return res.status(200).send(posts)
+// }
 const createPost = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const { title, shortDescription, content, blogId } = req.body;

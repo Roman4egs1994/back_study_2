@@ -10,6 +10,8 @@ export const createBlog = async (req:Request , res:Response) => {
         const {name, description, websiteUrl} = req.body
 
         const blog = await blogsService.createBlogService({name, description, websiteUrl})
+
+
         const blogMap = mapToBlogs(blog)
         return res.status(HttpStatuses.CREATED).send(blogMap)
         

@@ -10,7 +10,7 @@ export const handlerErrors  = (error: unknown, res: Response) => {
         const httpStatus = HttpStatuses.NOT_FOUND
 
         res.status(httpStatus).send(
-            createErrorResponse({ field: '', detail: 'Blog not found', status: httpStatus })
+            createErrorResponse({ field: '', detail: error.message, status: httpStatus })
         )
       return
     }

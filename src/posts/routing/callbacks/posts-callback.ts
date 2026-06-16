@@ -8,11 +8,11 @@ import {createErrorResponse} from "../../../core/middlewares/validations/createE
 import {PostBDType,  PostUpdateT} from "../../types/posts.type";
 
 
-export const getPosts = async (req:Request , res:Response) => {
-
-    const posts = await postRepository.getAllPosts()
-    return res.status(200).send(posts)
-}
+// export const getPosts = async (req:Request , res:Response) => {
+//
+//     const posts = await postRepository.getAllPosts()
+//     return res.status(200).send(posts)
+// }
 
 export const createPost = async (req:Request , res:Response) => {
 

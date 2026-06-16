@@ -1,15 +1,33 @@
 import {ObjectId} from "mongodb";
 import {blogsCollection} from "../../db/mongo.db";
-import {mapToBlogs} from "../utils/mapToBlogs";
-import {BlogDBT, BlogModelT} from "../types/blog.type";
+import {BlogDBT} from "../types/blog.type";
 import {RepositoryNotFoundError} from "../../core/errors/repository-not-found";
+import {BlogQueryInput} from "../routing/inputs";
+import {skipPagination} from "../../core/utils/skipPagination";
 
 
 export const blogRepository = {
 
-   async sendAllBlogs ():Promise<BlogDBT[]> {
-       const blogs = await blogsCollection.find().toArray()
-       return blogs
+    async findMany(queryDto: BlogQueryInput): Promise<{ items: BlogDBT[]; totalCount: number }> {
+        const { pageNumber, pageSize, sortBy, sortDirection, searchNameTerm } = queryDto;
+
+        const filter: any = {};
+        if (searchNameTerm) {
+            filter.name = { $regex: searchNameTerm, $options: 'i' };
+        }
+
+        const skip = skipPagination(pageNumber, pageSize)
+
+        const items = await blogsCollection
+            .find(filter)
+            .sort({ [sortBy]: sortDirection === 'asc' ? 1 : -1 })
+            .skip(skip)
+            .limit(pageSize)
+            .toArray();
+
+        const totalCount = await blogsCollection.countDocuments(filter);
+
+        return { items, totalCount };
     },
 
    async createBlog (blog: Omit<BlogDBT, '_id'>):Promise<BlogDBT> {
@@ -44,4 +62,3 @@ export const blogRepository = {
     }
 
 }
-

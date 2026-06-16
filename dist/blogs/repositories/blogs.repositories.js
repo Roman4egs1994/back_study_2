@@ -13,11 +13,24 @@ exports.blogRepository = void 0;
 const mongodb_1 = require("mongodb");
 const mongo_db_1 = require("../../db/mongo.db");
 const repository_not_found_1 = require("../../core/errors/repository-not-found");
+const skipPagination_1 = require("../../core/utils/skipPagination");
 exports.blogRepository = {
-    sendAllBlogs() {
+    findMany(queryDto) {
         return __awaiter(this, void 0, void 0, function* () {
-            const blogs = yield mongo_db_1.blogsCollection.find().toArray();
-            return blogs;
+            const { pageNumber, pageSize, sortBy, sortDirection, searchNameTerm } = queryDto;
+            const filter = {};
+            if (searchNameTerm) {
+                filter.name = { $regex: searchNameTerm, $options: 'i' };
+            }
+            const skip = (0, skipPagination_1.skipPagination)(pageNumber, pageSize);
+            const items = yield mongo_db_1.blogsCollection
+                .find(filter)
+                .sort({ [sortBy]: sortDirection === 'asc' ? 1 : -1 })
+                .skip(skip)
+                .limit(pageSize)
+                .toArray();
+            const totalCount = yield mongo_db_1.blogsCollection.countDocuments(filter);
+            return { items, totalCount };
         });
     },
     createBlog(blog) {

@@ -3,14 +3,33 @@ import {ObjectId} from "mongodb";
 import {PostModelT, PostUpdateT} from "../types/posts.type";
 import {mapToPost} from "../utils/mapToPost";
 import {PostBDType} from "../types/posts.type";
+import {PostQueryInput} from "../routing/inputsPost";
+import {skipPagination} from "../../core/utils/skipPagination";
+import {SortDirection} from "../../core/type/paginationAndSorting.types";
+
+
+
+
 
 
 
 export const postRepository = {
 
-    getAllPosts: async (): Promise<PostModelT[]> => {
-        const posts = await postsCollection.find().toArray()
-        return posts.map(mapToPost)
+    getAndFindArrayPostsRepo: async (queryDto: PostQueryInput): Promise<{items: PostBDType[], totalCount: number}> => {
+
+        const {pageNumber, pageSize, sortBy, sortDirection} = queryDto
+        const skip = skipPagination(pageNumber, pageSize)
+
+        const items  = await postsCollection
+            .find()
+            .sort({[sortBy]: sortDirection === SortDirection.DESC ? -1 : 1})
+            .skip(skip)
+            .limit(pageSize)
+            .toArray()
+
+        const totalCount = await postsCollection.countDocuments()
+
+        return {items, totalCount}
     },
 
     searchPost: async (postId: string): Promise<PostModelT | null> => {

@@ -14,9 +14,11 @@ const super_admin_guard_middleware_1 = require("../../auth/middlewares/super-adm
 const get_by_id_blog_handler_1 = require("./routing-callbacks/get-by-id-blog.handler");
 const update_blog_handler_1 = require("./routing-callbacks/update-blog.handler");
 const delete_blog_handler_1 = require("./routing-callbacks/delete-blog.handler");
+const paginationAndSortingValidation_1 = require("../../core/middlewares/validations/paginationAndSortingValidation");
+const inputs_1 = require("./inputs");
 exports.routerBlogs = express_1.default.Router();
-exports.routerBlogs.get("/", get_all_blogs_handler_1.getBlogs);
-exports.routerBlogs.post("/", super_admin_guard_middleware_1.superAdminGuardMiddleware, ...blogs_validations_1.blogsValidations, (0, validation_response_1.validateResponse)(), create_blog_handler_1.createBlog);
-exports.routerBlogs.get("/:id", isValidationId_1.idValidationParamId, (0, validation_response_1.validateResponse)(), get_by_id_blog_handler_1.getByIdBlog);
-exports.routerBlogs.put("/:id", isValidationId_1.idValidationParamId, super_admin_guard_middleware_1.superAdminGuardMiddleware, ...blogs_validations_1.blogsValidations, (0, validation_response_1.validateResponse)(), update_blog_handler_1.updateBlog);
-exports.routerBlogs.delete("/:id", isValidationId_1.idValidationParamId, super_admin_guard_middleware_1.superAdminGuardMiddleware, (0, validation_response_1.validateResponse)(), delete_blog_handler_1.deleteBlog);
+exports.routerBlogs.get("/", (0, paginationAndSortingValidation_1.paginationAndSortingValidation)(inputs_1.BlogSortField), (0, validation_response_1.validateResponseMiddleware)(), get_all_blogs_handler_1.getBlogs);
+exports.routerBlogs.post("/", super_admin_guard_middleware_1.superAdminGuardMiddleware, ...blogs_validations_1.blogsValidations, (0, validation_response_1.validateResponseMiddleware)(), create_blog_handler_1.createBlog);
+exports.routerBlogs.get("/:id", isValidationId_1.idValidationParamId, (0, validation_response_1.validateResponseMiddleware)(), get_by_id_blog_handler_1.getByIdBlog);
+exports.routerBlogs.put("/:id", isValidationId_1.idValidationParamId, super_admin_guard_middleware_1.superAdminGuardMiddleware, ...blogs_validations_1.blogsValidations, (0, validation_response_1.validateResponseMiddleware)(), update_blog_handler_1.updateBlog);
+exports.routerBlogs.delete("/:id", isValidationId_1.idValidationParamId, super_admin_guard_middleware_1.superAdminGuardMiddleware, (0, validation_response_1.validateResponseMiddleware)(), delete_blog_handler_1.deleteBlog);

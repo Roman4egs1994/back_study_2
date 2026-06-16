@@ -13,10 +13,20 @@ exports.postRepository = void 0;
 const mongo_db_1 = require("../../db/mongo.db");
 const mongodb_1 = require("mongodb");
 const mapToPost_1 = require("../utils/mapToPost");
+const skipPagination_1 = require("../../core/utils/skipPagination");
+const paginationAndSorting_types_1 = require("../../core/type/paginationAndSorting.types");
 exports.postRepository = {
-    getAllPosts: () => __awaiter(void 0, void 0, void 0, function* () {
-        const posts = yield mongo_db_1.postsCollection.find().toArray();
-        return posts.map(mapToPost_1.mapToPost);
+    getAndFindArrayPostsRepo: (queryDto) => __awaiter(void 0, void 0, void 0, function* () {
+        const { pageNumber, pageSize, sortBy, sortDirection } = queryDto;
+        const skip = (0, skipPagination_1.skipPagination)(pageNumber, pageSize);
+        const items = yield mongo_db_1.postsCollection
+            .find()
+            .sort({ [sortBy]: sortDirection === paginationAndSorting_types_1.SortDirection.DESC ? -1 : 1 })
+            .skip(skip)
+            .limit(pageSize)
+            .toArray();
+        const totalCount = yield mongo_db_1.postsCollection.countDocuments();
+        return { items, totalCount };
     }),
     searchPost: (postId) => __awaiter(void 0, void 0, void 0, function* () {
         const post = yield mongo_db_1.postsCollection.findOne({ _id: new mongodb_1.ObjectId(postId) });

@@ -1,18 +1,40 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.validateResponse = void 0;
+exports.validateResponseMiddleware = exports.createErrorMessages = void 0;
 const express_validator_1 = require("express-validator");
 const HttpStatuses_1 = require("../type/HttpStatuses");
-const formatErrors_1 = require("./formatErrors");
-const validateResponse = (statusCode = HttpStatuses_1.HttpStatuses.BAD_REQUEST) => {
+const createErrorMessages = (errors) => {
+    return {
+        errors: errors.map((error) => {
+            var _a, _b;
+            return ({
+                status: error.status,
+                detail: error.detail, //error message
+                source: { pointer: (_a = error.source) !== null && _a !== void 0 ? _a : '' }, //error field
+                code: (_b = error.code) !== null && _b !== void 0 ? _b : null, //domain error code
+            });
+        }),
+    };
+};
+exports.createErrorMessages = createErrorMessages;
+const formaValidationError = (error) => {
+    const expressError = error;
+    return {
+        status: HttpStatuses_1.HttpStatuses.BAD_REQUEST,
+        source: expressError.path,
+        detail: expressError.msg,
+    };
+};
+const validateResponseMiddleware = (statusCode = HttpStatuses_1.HttpStatuses.BAD_REQUEST) => {
     return (req, res, next) => {
-        const errors = (0, express_validator_1.validationResult)(req).formatWith(formatErrors_1.formatErrors).array({
+        const errors = (0, express_validator_1.validationResult)(req).formatWith(formaValidationError).array({
             onlyFirstError: true
         });
         if (errors.length > 0) {
-            return res.status(statusCode).json({ errorsMessages: errors });
+            res.status(HttpStatuses_1.HttpStatuses.BAD_REQUEST).json((0, exports.createErrorMessages)(errors));
+            return;
         }
         next();
     };
 };
-exports.validateResponse = validateResponse;
+exports.validateResponseMiddleware = validateResponseMiddleware;
