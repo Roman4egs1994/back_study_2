@@ -1,5 +1,5 @@
-import {PostBDType, PostModelT} from "../types/posts.type";
-
+import {PostBDType, PostModelT, PostQueryResponse} from "../types/posts.type";
+import {PostQueryInput} from "../routing/inputsPost";
 
 export const mapToPost = (post: PostBDType): PostModelT => {
     const {_id, title, shortDescription, blogId, content, blogName, createdAt} = post
@@ -14,3 +14,15 @@ export const mapToPost = (post: PostBDType): PostModelT => {
         createdAt,
     }
 }
+
+export const mapToPostsQueryResponse = (
+    items: PostBDType[],
+    totalCount: number,
+    queryDto: PostQueryInput,
+): PostQueryResponse => ({
+    pagesCount: Math.ceil(totalCount / queryDto.pageSize),
+    page: queryDto.pageNumber,
+    pageSize: queryDto.pageSize,
+    totalCount,
+    items: items.map(mapToPost),
+})

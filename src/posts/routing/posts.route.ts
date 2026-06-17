@@ -1,22 +1,32 @@
 import express from "express";
-import {getPosts, createPost, getPostById, updatePost, deletePost} from "./callbacks/posts-callback";
+import {deletePost} from "./callbacks/deletePost";
 import {postsValidations} from "../validations/posts.validations";
-import {validateResponse} from "../../core/middlewares/validations/validation.response";
+import {validateResponseMiddleware} from "../../core/middlewares/validations/validation.response";
 import {idValidationParamId} from "../../core/middlewares/validations/isValidationId";
 import {superAdminGuardMiddleware} from "../../auth/middlewares/super-admin.guard-middleware";
+import {getAndFindArrayPostsHandler} from "./callbacks/getAndFindArrayPosts";
+import {paginationAndSortingValidation} from "../../core/middlewares/validations/paginationAndSortingValidation";
+import {PostSortField} from "./inputsPost";
+import {createPost} from "./callbacks/createPostHandler";
+import {findPostById} from "./callbacks/findPostById";
+import {updatePost} from "./callbacks/updatePost";
+
+
+
+
 
 
 
 export const routerPosts = express.Router();
 
 
-routerPosts.get('/', getPosts)
+routerPosts.get('/', paginationAndSortingValidation(PostSortField), validateResponseMiddleware(), getAndFindArrayPostsHandler)
 
-routerPosts.post('/', superAdminGuardMiddleware, ...postsValidations, validateResponse(), createPost )
+routerPosts.post('/', superAdminGuardMiddleware, ...postsValidations, validateResponseMiddleware(), createPost )
 
-routerPosts.get('/:id',idValidationParamId, validateResponse(), getPostById)
+routerPosts.get('/:id',idValidationParamId, validateResponseMiddleware(), findPostById)
 
-routerPosts.put('/:id', idValidationParamId, superAdminGuardMiddleware, ...postsValidations, validateResponse(),updatePost)
+routerPosts.put('/:id', idValidationParamId, superAdminGuardMiddleware, ...postsValidations, validateResponseMiddleware(),updatePost)
 
-routerPosts.delete('/:id',idValidationParamId, superAdminGuardMiddleware, validateResponse(), deletePost)
+routerPosts.delete('/:id',idValidationParamId, superAdminGuardMiddleware, validateResponseMiddleware(), deletePost)
 

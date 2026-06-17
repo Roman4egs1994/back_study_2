@@ -17,3 +17,12 @@ export type BlogDBT = {
     createdAt: string
     isMembership: false
 }
+
+
+export type BlogQueryResponse = {
+    items: BlogModelT[]
+    totalCount: number
+    pagesCount: number
+    page: number
+    pageSize: number
+}

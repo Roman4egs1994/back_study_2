@@ -1,10 +1,17 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
+import { Request, Response } from 'express';
+import {blogRepository} from "../../repositories/blogs.repositories";
+
+
+import {HttpStatuses} from "../../../core/middlewares/type/HttpStatuses";
+import {postRepository} from "../../../posts/repositoties/posts.repositories";
+import {BlogDBT} from "../../types/blog.type";
+
 // export const getBlogs =  async (req:Request , res:Response) => {
 //     const allBlogs = await blogRepository.sendAllBlogs()
 //
 //     return res.status(200).send(allBlogs)
 // }
+
 //OLD (Уехало в сервис)
 // export const createBlog = async (req:Request , res:Response) => {
 //     const {name, description, websiteUrl} = req.body
@@ -23,6 +30,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 //     return res.status(HttpStatuses.CREATED).send(blog)
 //
 // }
+
+
 // export const getByIdBlog = async (req:Request,res:Response) => {
 //
 //     try {
@@ -39,6 +48,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 //         return res.status(HttpStatuses.INTERNAL_SERVER_ERROR).send('Server error')
 //     }
 // }
+
 // export const updateBlog = async (req:Request,res:Response) => {
 //     const {name,description, websiteUrl} = req.body
 //      try {
@@ -59,6 +69,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 //     }
 //
 // }
+
 // export const deleteBlog = async (req:Request,res:Response) => {
 //      try {
 //          const blog = await blogRepository.findByIdBlogOrFail(req.params.id as string)

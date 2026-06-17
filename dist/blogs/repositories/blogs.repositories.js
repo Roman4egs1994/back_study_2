@@ -12,24 +12,40 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.blogRepository = void 0;
 const mongodb_1 = require("mongodb");
 const mongo_db_1 = require("../../db/mongo.db");
-const mapToBlogs_1 = require("../utils/mapToBlogs");
+const repository_not_found_1 = require("../../core/errors/repository-not-found");
+const skipPagination_1 = require("../../core/utils/skipPagination");
 exports.blogRepository = {
-    sendAllBlogs() {
+    findMany(queryDto) {
         return __awaiter(this, void 0, void 0, function* () {
-            const blogs = yield mongo_db_1.blogsCollection.find().toArray();
-            return blogs.map(mapToBlogs_1.mapToBlogs);
+            const { pageNumber, pageSize, sortBy, sortDirection, searchNameTerm } = queryDto;
+            const filter = {};
+            if (searchNameTerm) {
+                filter.name = { $regex: searchNameTerm, $options: 'i' };
+            }
+            const skip = (0, skipPagination_1.skipPagination)(pageNumber, pageSize);
+            const items = yield mongo_db_1.blogsCollection
+                .find(filter)
+                .sort({ [sortBy]: sortDirection === 'asc' ? 1 : -1 })
+                .skip(skip)
+                .limit(pageSize)
+                .toArray();
+            const totalCount = yield mongo_db_1.blogsCollection.countDocuments(filter);
+            return { items, totalCount };
         });
     },
     createBlog(blog) {
         return __awaiter(this, void 0, void 0, function* () {
             const insertResult = yield mongo_db_1.blogsCollection.insertOne(blog);
-            return (0, mapToBlogs_1.mapToBlogs)(Object.assign({ _id: insertResult.insertedId }, blog));
+            return Object.assign({ _id: insertResult.insertedId }, blog);
         });
     },
-    getById(id) {
+    findByIdBlogOrFail(id) {
         return __awaiter(this, void 0, void 0, function* () {
             const blog = yield mongo_db_1.blogsCollection.findOne({ _id: new mongodb_1.ObjectId(id) });
-            return blog ? (0, mapToBlogs_1.mapToBlogs)(blog) : null;
+            if (!blog) {
+                throw new repository_not_found_1.RepositoryNotFoundError("Blog not found");
+            }
+            return blog;
         });
     },
     update(id, dto) {
@@ -39,7 +55,7 @@ exports.blogRepository = {
                 throw new Error('Blog not found');
             }
             const updated = yield mongo_db_1.blogsCollection.findOne({ _id: new mongodb_1.ObjectId(id) });
-            return (0, mapToBlogs_1.mapToBlogs)(updated);
+            return updated;
         });
     },
     delete(id) {

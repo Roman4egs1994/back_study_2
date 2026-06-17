@@ -28,3 +28,11 @@ export type PostUpdateT = {
     blogId: string,
     content: string
 }
+
+export type PostQueryResponse = {
+    pagesCount: number
+    page: number
+    pageSize: number
+    totalCount: number
+    items: PostModelT[]
+}
