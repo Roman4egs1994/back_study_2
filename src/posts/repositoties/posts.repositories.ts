@@ -1,11 +1,11 @@
 import { postsCollection} from "../../db/mongo.db";
 import {ObjectId} from "mongodb";
-import {PostModelT, PostUpdateT} from "../types/posts.type";
-import {mapToPost} from "../utils/mapToPost";
+import {PostUpdateT} from "../types/posts.type";
 import {PostBDType} from "../types/posts.type";
 import {PostQueryInput} from "../routing/inputsPost";
 import {skipPagination} from "../../core/utils/skipPagination";
 import {SortDirection} from "../../core/type/paginationAndSorting.types";
+import {RepositoryNotFoundError} from "../../core/errors/repository-not-found";
 
 
 
@@ -32,9 +32,12 @@ export const postRepository = {
         return {items, totalCount}
     },
 
-    searchPost: async (postId: string): Promise<PostModelT | null> => {
+    searchPost: async (postId: string): Promise<PostBDType> => {
         const post = await postsCollection.findOne({ _id: new ObjectId(postId) })
-        return post ? mapToPost(post) : null
+        if(!post) {
+           throw new RepositoryNotFoundError('Post not found')
+        }
+        return post
     },
 
     createPost: async (post: Omit<PostBDType, '_id'>): Promise<PostBDType> => {
@@ -42,10 +45,13 @@ export const postRepository = {
         return {...post, _id: insertResult.insertedId}
     },
 
-    update: async (id: string, updateData: PostUpdateT): Promise<PostModelT | null> => {
-        await postsCollection.updateOne({ _id: new ObjectId(id) }, { $set: updateData })
-        const updated = await postsCollection.findOne({ _id: new ObjectId(id) })
-        return updated ? mapToPost(updated) : null
+    update: async (id: string, updateData: PostUpdateT): Promise<PostBDType> => {
+        const updatedPost = await postsCollection.findOneAndUpdate(
+            { _id: new ObjectId(id) },
+            { $set: updateData },
+            { returnDocument: 'after' }
+        )
+        return updatedPost!
     },
 
     updateBlogName: async (blogId: string, blogName: string) => {

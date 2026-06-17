@@ -43,55 +43,55 @@ import {PostBDType,  PostUpdateT} from "../../types/posts.type";
 //     }
 // }
 
-export const getPostById = async (req:Request , res:Response) => {
+// export const getPostById = async (req:Request , res:Response) => {
+//
+//    try {
+//        const {id} = req.params
+//        const post = await postRepository.searchPost(id as string)
+//        if (!post) {
+//            return res.status(HttpStatuses.NOT_FOUND).send('Post not found')
+//        }
+//        return res.status(HttpStatuses.OK).send(post)
+//
+//    } catch (e) {
+//
+//    }
+// }
 
-   try {
-       const {id} = req.params
-       const post = await postRepository.searchPost(id as string)
-       if (!post) {
-           return res.status(HttpStatuses.NOT_FOUND).send('Post not found')
-       }
-       return res.status(HttpStatuses.OK).send(post)
+// export const updatePost = async (req:Request , res:Response) => {
+//     try {
+//         const {title, shortDescription, content, blogId} = req.body as PostUpdateT
+//
+//         const blog = await blogRepository.findByIdBlogOrFail(blogId as string)
+//         if (!blog) {
+//             return res.status(HttpStatuses.NOT_FOUND).send(
+//                 createErrorResponse({ field: 'blogId', detail: 'Blog not found', status: HttpStatuses.NOT_FOUND })
+//             )
+//         }
+//
+//         const {id} = req.params
+//         const post = await postRepository.searchPost(id as string)
+//         if (!post) {
+//             return res.status(HttpStatuses.NOT_FOUND).send('Post not found')
+//         }
+//
+//         const updatedPost = await postRepository.update(id as string, {title, shortDescription, content, blogId})
+//
+//         return res.status(HttpStatuses.NO_CONTENT).send(updatedPost)
+//     } catch (e) {
+//
+//     }
+//
+// }
 
-   } catch (e) {
-
-   }
-}
-
-export const updatePost = async (req:Request , res:Response) => {
-    try {
-        const {title, shortDescription, content, blogId} = req.body as PostUpdateT
-
-        const blog = await blogRepository.findByIdBlogOrFail(blogId as string)
-        if (!blog) {
-            return res.status(HttpStatuses.NOT_FOUND).send(
-                createErrorResponse({ field: 'blogId', detail: 'Blog not found', status: HttpStatuses.NOT_FOUND })
-            )
-        }
-
-        const {id} = req.params
-        const post = await postRepository.searchPost(id as string)
-        if (!post) {
-            return res.status(HttpStatuses.NOT_FOUND).send('Post not found')
-        }
-
-        const updatedPost = await postRepository.update(id as string, {title, shortDescription, content, blogId})
-
-        return res.status(HttpStatuses.NO_CONTENT).send(updatedPost)
-    } catch (e) {
-
-    }
-
-}
-
-export const deletePost = async (req:Request,res: Response) => {
-    const {id} = req.params
-
-    const post = await postRepository.searchPost(id as string)
-    if (!post) {
-        return res.status(HttpStatuses.NOT_FOUND).send('Post not found')
-    }
-
-    await postRepository.delete(id as string)
-    return res.status(HttpStatuses.NO_CONTENT).send()
-}
+// export const deletePost = async (req:Request,res: Response) => {
+//     const {id} = req.params
+//
+//     const post = await postRepository.searchPost(id as string)
+//     if (!post) {
+//         return res.status(HttpStatuses.NOT_FOUND).send('Post not found')
+//     }
+//
+//     await postRepository.delete(id as string)
+//     return res.status(HttpStatuses.NO_CONTENT).send()
+// }
