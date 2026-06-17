@@ -27,11 +27,10 @@ export const postsService = {
         return mapToPost(post)
     },
 
-    updatePostService: async (id: string, dto: PostUpdateT): Promise<PostModelT> => {
+    updatePostService: async (id: string, dto: PostUpdateT): Promise<void> => {
         await blogsService.findByIdBlogOrFail(dto.blogId)
         await postRepository.searchPost(id)
-        const updated = await postRepository.update(id, dto)
-        return mapToPost(updated)
+        await postRepository.update(id, dto)
     },
 
     deletePostService: async (id: string): Promise<void> => {

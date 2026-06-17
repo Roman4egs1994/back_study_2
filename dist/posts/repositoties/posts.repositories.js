@@ -41,8 +41,7 @@ exports.postRepository = {
         return Object.assign(Object.assign({}, post), { _id: insertResult.insertedId });
     }),
     update: (id, updateData) => __awaiter(void 0, void 0, void 0, function* () {
-        const updatedPost = yield mongo_db_1.postsCollection.findOneAndUpdate({ _id: new mongodb_1.ObjectId(id) }, { $set: updateData }, { returnDocument: 'after' });
-        return updatedPost;
+        yield mongo_db_1.postsCollection.updateOne({ _id: new mongodb_1.ObjectId(id) }, { $set: updateData });
     }),
     updateBlogName: (blogId, blogName) => __awaiter(void 0, void 0, void 0, function* () {
         yield mongo_db_1.postsCollection.updateMany({ blogId }, { $set: { blogName } });

@@ -9,11 +9,9 @@ export const createErrorMessages = (
     errors: ValidationErrorType[],
 ): ValidationErrorListOutput => {
     return {
-        errors: errors.map((error) => ({
-            status: error.status,
-            detail: error.detail, //error message
-            source: { pointer: error.source ?? '' }, //error field
-            code: error.code ?? null, //domain error code
+        errorsMessages: errors.map((error) => ({
+            message: error.detail,
+            field: error.source ?? '',
         })),
     };
 };
@@ -28,6 +26,31 @@ const formaValidationError = (error: ValidationError): ValidationErrorType => {
     };
 };
 
+
+// OLD format: { errors: [{ status, detail, source: { pointer }, code }] }
+// NEW format: { errorsMessages: [{ message, field }] }
+// Изменено чтобы соответствовать стандарту API курса (IT Incubator)
+export const validateResponseMiddlewareOld = () => {
+    return (req: Request, res: Response, next: NextFunction) => {
+        const errors = validationResult(req).formatWith(formaValidationError).array({
+            onlyFirstError: true
+        });
+
+        if (errors.length > 0) {
+            res.status(HttpStatuses.BAD_REQUEST).json({
+                errors: errors.map((error) => ({
+                    status: error.status,
+                    detail: error.detail,
+                    source: { pointer: error.source ?? '' },
+                    code: error.code ?? null,
+                })),
+            });
+            return;
+        }
+
+        next();
+    };
+};
 
 export const validateResponseMiddleware = (statusCode = HttpStatuses.BAD_REQUEST) => {
     return (req: Request, res: Response, next: NextFunction) => {

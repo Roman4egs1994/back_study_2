@@ -7,8 +7,8 @@ import {handlerErrors} from "../../../core/errors/handlerErrors";
 export const updatePost = async (req:Request , res:Response) => {
     try {
         const {id} = req.params as {id: string}
-        const updated = await postsService.updatePostService(id, req.body as PostUpdateT)
-        return res.status(HttpStatuses.OK).send(updated)
+        await postsService.updatePostService(id, req.body as PostUpdateT)
+        return res.status(HttpStatuses.NO_CONTENT).send()
     } catch (e: unknown) {
         handlerErrors(e, res)
     }

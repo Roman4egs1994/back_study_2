@@ -47,13 +47,8 @@ export const postRepository = {
         return {...post, _id: insertResult.insertedId}
     },
 
-    update: async (id: string, updateData: PostUpdateT): Promise<PostBDType> => {
-        const updatedPost = await postsCollection.findOneAndUpdate(
-            { _id: new ObjectId(id) },
-            { $set: updateData },
-            { returnDocument: 'after' }
-        )
-        return updatedPost!
+    update: async (id: string, updateData: PostUpdateT): Promise<void> => {
+        await postsCollection.updateOne({ _id: new ObjectId(id) }, { $set: updateData })
     },
 
     updateBlogName: async (blogId: string, blogName: string) => {

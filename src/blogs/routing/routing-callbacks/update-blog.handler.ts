@@ -12,9 +12,9 @@ export const updateBlog = async (req:Request,res:Response) => {
 
           const {name, description, websiteUrl} = req.body
           const {id} = req.params
-          const blog = await blogsService.updateBlogService(id as string, { name, description, websiteUrl })
+          await blogsService.updateBlogService(id as string, { name, description, websiteUrl })
 
-          return res.status(HttpStatuses.OK).send(mapToBlogs(blog))
+          return res.status(HttpStatuses.NO_CONTENT).send()
 
     } catch (error) {
         handlerErrors(error,res)

@@ -1,13 +1,11 @@
 import {HttpStatuses} from "../middlewares/type/HttpStatuses";
 
 type ValidationErrorOutput = {
-    status: HttpStatuses;
-    detail: string;
-    source: { pointer: string };
-    code: string | null;
+    message: string;
+    field: string;
 };
 
-export type ValidationErrorListOutput = { errors: ValidationErrorOutput[] };
+export type ValidationErrorListOutput = { errorsMessages: ValidationErrorOutput[] };
 
 
 export type ValidationErrorType = {

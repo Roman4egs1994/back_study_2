@@ -16,14 +16,23 @@ const update_blog_handler_1 = require("./routing-callbacks/update-blog.handler")
 const delete_blog_handler_1 = require("./routing-callbacks/delete-blog.handler");
 const paginationAndSortingValidation_1 = require("../../core/middlewares/validations/paginationAndSortingValidation");
 const inputs_1 = require("./inputs");
+const inputsPost_1 = require("../../posts/routing/inputsPost");
 const get_all_post_by_blog_handler_1 = require("./routing-callbacks/get-all-post-by-blog.handler");
 const create_post_by_blog_id_handler_1 = require("./routing-callbacks/create-post-by-blog-id.handler");
 const posts_validations_1 = require("../../posts/validations/posts.validations");
+const update_blog_old_handler_1 = require("./routing-callbacks/update-blog-old.handler");
+const validation_response_2 = require("../../core/middlewares/validations/validation.response");
 exports.routerBlogs = express_1.default.Router();
 exports.routerBlogs.get("/", (0, paginationAndSortingValidation_1.paginationAndSortingValidation)(inputs_1.BlogSortField), (0, validation_response_1.validateResponseMiddleware)(), get_all_blogs_handler_1.getBlogs);
 exports.routerBlogs.post("/", super_admin_guard_middleware_1.superAdminGuardMiddleware, ...blogs_validations_1.blogsValidations, (0, validation_response_1.validateResponseMiddleware)(), create_blog_handler_1.createBlog);
 exports.routerBlogs.get("/:id", isValidationId_1.idValidationParamId, (0, validation_response_1.validateResponseMiddleware)(), get_by_id_blog_handler_1.getByIdBlog);
 exports.routerBlogs.put("/:id", isValidationId_1.idValidationParamId, super_admin_guard_middleware_1.superAdminGuardMiddleware, ...blogs_validations_1.blogsValidations, (0, validation_response_1.validateResponseMiddleware)(), update_blog_handler_1.updateBlog);
 exports.routerBlogs.delete("/:id", isValidationId_1.idValidationParamId, super_admin_guard_middleware_1.superAdminGuardMiddleware, (0, validation_response_1.validateResponseMiddleware)(), delete_blog_handler_1.deleteBlog);
-exports.routerBlogs.get("/:id/post", (0, paginationAndSortingValidation_1.paginationAndSortingValidation)(inputs_1.BlogSortField), (0, validation_response_1.validateResponseMiddleware)(), get_all_post_by_blog_handler_1.getAllPostByBlogId);
-exports.routerBlogs.post("/:id/post", isValidationId_1.idValidationParamId, super_admin_guard_middleware_1.superAdminGuardMiddleware, ...posts_validations_1.postsValidationsWithoutBlogId, (0, validation_response_1.validateResponseMiddleware)(), create_post_by_blog_id_handler_1.createPostByBlogId);
+exports.routerBlogs.get("/:id/posts", (0, paginationAndSortingValidation_1.paginationAndSortingValidation)(inputsPost_1.PostSortField), (0, validation_response_1.validateResponseMiddleware)(), get_all_post_by_blog_handler_1.getAllPostByBlogId);
+exports.routerBlogs.post("/:id/posts", isValidationId_1.idValidationParamId, super_admin_guard_middleware_1.superAdminGuardMiddleware, ...posts_validations_1.postsValidationsWithoutBlogId, (0, validation_response_1.validateResponseMiddleware)(), create_post_by_blog_id_handler_1.createPostByBlogId);
+// --- OLD роуты (для сравнения со старым поведением) ---
+// PUT /blogs/:id/old — возвращает 200 + тело блога (было до изменений)
+//   новый PUT /blogs/:id — возвращает 204 без тела (REST-стандарт)
+// Ошибки валидации здесь в старом формате: { errors: [{ status, detail, source, code }] }
+//   новый формат: { errorsMessages: [{ message, field }] }
+exports.routerBlogs.put("/:id/old", isValidationId_1.idValidationParamId, super_admin_guard_middleware_1.superAdminGuardMiddleware, ...blogs_validations_1.blogsValidations, (0, validation_response_2.validateResponseMiddlewareOld)(), update_blog_old_handler_1.updateBlogOld);
