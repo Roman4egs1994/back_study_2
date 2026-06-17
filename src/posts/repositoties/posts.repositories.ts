@@ -37,9 +37,9 @@ export const postRepository = {
         return post ? mapToPost(post) : null
     },
 
-    createPost: async (post: Omit<PostBDType, '_id'>): Promise<PostModelT> => {
+    createPost: async (post: Omit<PostBDType, '_id'>): Promise<PostBDType> => {
         const insertResult = await postsCollection.insertOne(post as PostBDType)
-        return mapToPost({...post, _id: insertResult.insertedId})
+        return {...post, _id: insertResult.insertedId}
     },
 
     update: async (id: string, updateData: PostUpdateT): Promise<PostModelT | null> => {

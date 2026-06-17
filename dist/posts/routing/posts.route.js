@@ -13,9 +13,10 @@ const super_admin_guard_middleware_1 = require("../../auth/middlewares/super-adm
 const getAndFindArrayPosts_1 = require("./callbacks/getAndFindArrayPosts");
 const paginationAndSortingValidation_1 = require("../../core/middlewares/validations/paginationAndSortingValidation");
 const inputsPost_1 = require("./inputsPost");
+const createPostHandler_1 = require("./callbacks/createPostHandler");
 exports.routerPosts = express_1.default.Router();
 exports.routerPosts.get('/', (0, paginationAndSortingValidation_1.paginationAndSortingValidation)(inputsPost_1.PostSortField), (0, validation_response_1.validateResponseMiddleware)(), getAndFindArrayPosts_1.getAndFindArrayPostsHandler);
-exports.routerPosts.post('/', super_admin_guard_middleware_1.superAdminGuardMiddleware, ...posts_validations_1.postsValidations, (0, validation_response_1.validateResponseMiddleware)(), posts_callback_1.createPost);
+exports.routerPosts.post('/', super_admin_guard_middleware_1.superAdminGuardMiddleware, ...posts_validations_1.postsValidations, (0, validation_response_1.validateResponseMiddleware)(), createPostHandler_1.createPost);
 exports.routerPosts.get('/:id', isValidationId_1.idValidationParamId, (0, validation_response_1.validateResponseMiddleware)(), posts_callback_1.getPostById);
 exports.routerPosts.put('/:id', isValidationId_1.idValidationParamId, super_admin_guard_middleware_1.superAdminGuardMiddleware, ...posts_validations_1.postsValidations, (0, validation_response_1.validateResponseMiddleware)(), posts_callback_1.updatePost);
 exports.routerPosts.delete('/:id', isValidationId_1.idValidationParamId, super_admin_guard_middleware_1.superAdminGuardMiddleware, (0, validation_response_1.validateResponseMiddleware)(), posts_callback_1.deletePost);

@@ -14,34 +14,34 @@ import {PostBDType,  PostUpdateT} from "../../types/posts.type";
 //     return res.status(200).send(posts)
 // }
 
-export const createPost = async (req:Request , res:Response) => {
-
-    try {
-        const {title, shortDescription, content, blogId} = req.body
-        const blog =  await blogRepository.findByIdBlogOrFail(blogId)
-
-        if (!blog) {
-            return res.status(HttpStatuses.NOT_FOUND).send('Blog not found')
-        }
-
-        const newPost: Omit<PostBDType, '_id'> = {
-            title,
-            shortDescription,
-            content,
-            blogId,
-            blogName: blog.name,
-            createdAt: new Date().toISOString(),
-            // isMembership: false
-        }
-
-        const post = await postRepository.createPost(newPost)
-
-        return res.status(HttpStatuses.CREATED).send(post)
-
-    } catch (e) {
-
-    }
-}
+// export const createPost = async (req:Request , res:Response) => {
+//
+//     try {
+//         const {title, shortDescription, content, blogId} = req.body
+//         const blog =  await blogRepository.findByIdBlogOrFail(blogId)
+//
+//         if (!blog) {
+//             return res.status(HttpStatuses.NOT_FOUND).send('Blog not found')
+//         }
+//
+//         const newPost: Omit<PostBDType, '_id'> = {
+//             title,
+//             shortDescription,
+//             content,
+//             blogId,
+//             blogName: blog.name,
+//             createdAt: new Date().toISOString(),
+//             // isMembership: false
+//         }
+//
+//         const post = await postRepository.createPost(newPost)
+//
+//         return res.status(HttpStatuses.CREATED).send(post)
+//
+//     } catch (e) {
+//
+//     }
+// }
 
 export const getPostById = async (req:Request , res:Response) => {
 

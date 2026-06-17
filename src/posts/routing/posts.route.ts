@@ -1,5 +1,5 @@
 import express from "express";
-import { createPost, getPostById, updatePost, deletePost} from "./callbacks/posts-callback";
+import {getPostById, updatePost, deletePost} from "./callbacks/posts-callback";
 import {postsValidations} from "../validations/posts.validations";
 import {validateResponseMiddleware} from "../../core/middlewares/validations/validation.response";
 import {idValidationParamId} from "../../core/middlewares/validations/isValidationId";
@@ -7,6 +7,8 @@ import {superAdminGuardMiddleware} from "../../auth/middlewares/super-admin.guar
 import {getAndFindArrayPostsHandler} from "./callbacks/getAndFindArrayPosts";
 import {paginationAndSortingValidation} from "../../core/middlewares/validations/paginationAndSortingValidation";
 import {PostSortField} from "./inputsPost";
+import {createPost} from "./callbacks/createPostHandler";
+
 
 
 

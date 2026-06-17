@@ -29,5 +29,8 @@ export const blogsService = {
       const { items, totalCount } = await blogRepository.findMany(queryDto)
       return mapToBlogsQueryResponse(items, totalCount, queryDto)
   },
-
+    findByIdBlogOrFail: async (id: string): Promise<BlogDBT> => {
+        const blog = await blogRepository.findByIdBlogOrFail(id)
+        return blog
+    }
 }

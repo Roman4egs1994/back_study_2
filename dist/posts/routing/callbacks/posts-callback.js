@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deletePost = exports.updatePost = exports.getPostById = exports.createPost = void 0;
+exports.deletePost = exports.updatePost = exports.getPostById = void 0;
 const posts_repositories_1 = require("../../repositoties/posts.repositories");
 const HttpStatuses_1 = require("../../../core/middlewares/type/HttpStatuses");
 const blogs_repositories_1 = require("../../../blogs/repositories/blogs.repositories");
@@ -19,29 +19,34 @@ const createErrorResponse_1 = require("../../../core/middlewares/validations/cre
 //     const posts = await postRepository.getAllPosts()
 //     return res.status(200).send(posts)
 // }
-const createPost = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    try {
-        const { title, shortDescription, content, blogId } = req.body;
-        const blog = yield blogs_repositories_1.blogRepository.findByIdBlogOrFail(blogId);
-        if (!blog) {
-            return res.status(HttpStatuses_1.HttpStatuses.NOT_FOUND).send('Blog not found');
-        }
-        const newPost = {
-            title,
-            shortDescription,
-            content,
-            blogId,
-            blogName: blog.name,
-            createdAt: new Date().toISOString(),
-            // isMembership: false
-        };
-        const post = yield posts_repositories_1.postRepository.createPost(newPost);
-        return res.status(HttpStatuses_1.HttpStatuses.CREATED).send(post);
-    }
-    catch (e) {
-    }
-});
-exports.createPost = createPost;
+// export const createPost = async (req:Request , res:Response) => {
+//
+//     try {
+//         const {title, shortDescription, content, blogId} = req.body
+//         const blog =  await blogRepository.findByIdBlogOrFail(blogId)
+//
+//         if (!blog) {
+//             return res.status(HttpStatuses.NOT_FOUND).send('Blog not found')
+//         }
+//
+//         const newPost: Omit<PostBDType, '_id'> = {
+//             title,
+//             shortDescription,
+//             content,
+//             blogId,
+//             blogName: blog.name,
+//             createdAt: new Date().toISOString(),
+//             // isMembership: false
+//         }
+//
+//         const post = await postRepository.createPost(newPost)
+//
+//         return res.status(HttpStatuses.CREATED).send(post)
+//
+//     } catch (e) {
+//
+//     }
+// }
 const getPostById = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const { id } = req.params;

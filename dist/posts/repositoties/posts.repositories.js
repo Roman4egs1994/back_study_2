@@ -34,7 +34,7 @@ exports.postRepository = {
     }),
     createPost: (post) => __awaiter(void 0, void 0, void 0, function* () {
         const insertResult = yield mongo_db_1.postsCollection.insertOne(post);
-        return (0, mapToPost_1.mapToPost)(Object.assign(Object.assign({}, post), { _id: insertResult.insertedId }));
+        return Object.assign(Object.assign({}, post), { _id: insertResult.insertedId });
     }),
     update: (id, updateData) => __awaiter(void 0, void 0, void 0, function* () {
         yield mongo_db_1.postsCollection.updateOne({ _id: new mongodb_1.ObjectId(id) }, { $set: updateData });
