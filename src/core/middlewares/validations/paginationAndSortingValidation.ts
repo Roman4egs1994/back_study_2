@@ -23,24 +23,24 @@ export function paginationAndSortingValidation<T extends string>(
 
     return [
         query('pageNumber')
-            .default(DEFAULT_PAGE_NUMBER)
+            .optional()
             .isInt({ min: 1 })
             .withMessage('Page number must be a positive integer')
             .toInt(),
 
         query('pageSize')
-            .default(DEFAULT_PAGE_SIZE)
+            .optional()
             .isInt({ min: 1, max: 100 })
             .withMessage('Page size must be between 1 and 100')
             .toInt(),
 
         query('sortBy')
-            .default(DEFAULT_SORT_BY)
+            .optional()
             .isString()
             .withMessage('sortBy must be a string'),
 
         query('sortDirection')
-            .default(DEFAULT_SORT_DIRECTION)
+            .optional()
             .isIn(Object.values(SortDirection))
             .withMessage(
                 `Sort direction must be one of: ${Object.values(SortDirection).join(', ')}`,
