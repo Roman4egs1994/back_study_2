@@ -16,16 +16,17 @@ const skipPagination_1 = require("../../core/utils/skipPagination");
 const paginationAndSorting_types_1 = require("../../core/type/paginationAndSorting.types");
 const repository_not_found_1 = require("../../core/errors/repository-not-found");
 exports.postRepository = {
-    getAndFindArrayPostsRepo: (queryDto) => __awaiter(void 0, void 0, void 0, function* () {
+    getAndFindArrayPostsRepo: (queryDto, blogId) => __awaiter(void 0, void 0, void 0, function* () {
         const { pageNumber, pageSize, sortBy, sortDirection } = queryDto;
         const skip = (0, skipPagination_1.skipPagination)(pageNumber, pageSize);
+        const filter = blogId ? { blogId } : {};
         const items = yield mongo_db_1.postsCollection
-            .find()
+            .find(filter)
             .sort({ [sortBy]: sortDirection === paginationAndSorting_types_1.SortDirection.DESC ? -1 : 1 })
             .skip(skip)
             .limit(pageSize)
             .toArray();
-        const totalCount = yield mongo_db_1.postsCollection.countDocuments();
+        const totalCount = yield mongo_db_1.postsCollection.countDocuments(filter);
         return { items, totalCount };
     }),
     searchPost: (postId) => __awaiter(void 0, void 0, void 0, function* () {

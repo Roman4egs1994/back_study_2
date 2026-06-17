@@ -10,6 +10,9 @@ import {updateBlog} from "./routing-callbacks/update-blog.handler";
 import {deleteBlog} from "./routing-callbacks/delete-blog.handler";
 import {paginationAndSortingValidation} from "../../core/middlewares/validations/paginationAndSortingValidation";
 import {BlogSortField} from "./inputs";
+import {getAllPostByBlogId} from "./routing-callbacks/get-all-post-by-blog.handler";
+import {createPostByBlogId} from "./routing-callbacks/create-post-by-blog-id.handler";
+import {postsValidationsWithoutBlogId} from "../../posts/validations/posts.validations";
 
 
 export const routerBlogs = express.Router();
@@ -24,6 +27,10 @@ routerBlogs.get("/:id",idValidationParamId,validateResponseMiddleware(), getById
 routerBlogs.put("/:id",idValidationParamId, superAdminGuardMiddleware, ...blogsValidations,validateResponseMiddleware(), updateBlog)
 
 routerBlogs.delete("/:id",idValidationParamId, superAdminGuardMiddleware, validateResponseMiddleware(), deleteBlog)
+
+routerBlogs.get("/:id/post", paginationAndSortingValidation(BlogSortField),validateResponseMiddleware(),getAllPostByBlogId )
+
+routerBlogs.post("/:id/post", idValidationParamId, superAdminGuardMiddleware, ...postsValidationsWithoutBlogId, validateResponseMiddleware(), createPostByBlogId)
 
 
 

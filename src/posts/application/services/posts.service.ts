@@ -7,13 +7,19 @@ import {blogsService} from "../../../blogs/application/services/blogs.service";
 
 export const postsService = {
 
-    getAndFindArrayPostsService: async (queryDto: PostQueryInput): Promise<PostQueryResponse> => {
-        const {items, totalCount} = await postRepository.getAndFindArrayPostsRepo(queryDto)
+    getAndFindArrayPostsService: async (queryDto: PostQueryInput, blogId?: string): Promise<PostQueryResponse> => {
+        const {items, totalCount} = await postRepository.getAndFindArrayPostsRepo(queryDto, blogId)
         return mapToPostsQueryResponse(items, totalCount, queryDto)
     },
 
-    createPostService: async (dto: Omit<PostBDType, '_id'>) : Promise<PostModelT> => {
-        const newPost = await postRepository.createPost(dto)
+    createPostService: async (blogId: string, dto: Pick<PostBDType, 'title' | 'shortDescription' | 'content'>): Promise<PostModelT> => {
+        const blog = await blogsService.findByIdBlogOrFail(blogId)
+        const newPost = await postRepository.createPost({
+            ...dto,
+            blogId,
+            blogName: blog.name,
+            createdAt: new Date().toISOString(),
+        })
         return mapToPost(newPost)
     },
     findByIdPostOrFail: async (id: string): Promise<PostModelT> => {

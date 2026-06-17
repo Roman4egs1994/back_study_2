@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.postsValidations = void 0;
+exports.postsValidationsWithoutBlogId = exports.postsValidations = void 0;
 const express_validator_1 = require("express-validator");
 const titleValidation = (0, express_validator_1.body)('title')
     .notEmpty()
@@ -34,3 +34,4 @@ const blogIdValidation = (0, express_validator_1.body)('blogId')
     .isMongoId()
     .withMessage('Incorrect format of ObjectId');
 exports.postsValidations = [titleValidation, shortDescriptionValidation, contentValidation, blogIdValidation];
+exports.postsValidationsWithoutBlogId = [titleValidation, shortDescriptionValidation, contentValidation];

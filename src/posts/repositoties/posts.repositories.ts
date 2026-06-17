@@ -15,19 +15,21 @@ import {RepositoryNotFoundError} from "../../core/errors/repository-not-found";
 
 export const postRepository = {
 
-    getAndFindArrayPostsRepo: async (queryDto: PostQueryInput): Promise<{items: PostBDType[], totalCount: number}> => {
+    getAndFindArrayPostsRepo: async (queryDto: PostQueryInput, blogId?: string): Promise<{items: PostBDType[], totalCount: number}> => {
 
         const {pageNumber, pageSize, sortBy, sortDirection} = queryDto
         const skip = skipPagination(pageNumber, pageSize)
 
+        const filter = blogId ? { blogId } : {}
+
         const items  = await postsCollection
-            .find()
+            .find(filter)
             .sort({[sortBy]: sortDirection === SortDirection.DESC ? -1 : 1})
             .skip(skip)
             .limit(pageSize)
             .toArray()
 
-        const totalCount = await postsCollection.countDocuments()
+        const totalCount = await postsCollection.countDocuments(filter)
 
         return {items, totalCount}
     },

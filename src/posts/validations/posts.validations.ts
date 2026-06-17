@@ -35,4 +35,5 @@ const blogIdValidation = body('blogId')
     .withMessage('Incorrect format of ObjectId');
 
 
-export const postsValidations = [titleValidation,shortDescriptionValidation,contentValidation,blogIdValidation]
+export const postsValidations = [titleValidation, shortDescriptionValidation, contentValidation, blogIdValidation]
+export const postsValidationsWithoutBlogId = [titleValidation, shortDescriptionValidation, contentValidation]
