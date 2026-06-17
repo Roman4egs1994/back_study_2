@@ -35,11 +35,9 @@ export function paginationAndSortingValidation<T extends string>(
             .toInt(),
 
         query('sortBy')
-            .default(Object.values(sortFieldsEnum)[0]) // Первое значение enum как дефолтное
-            .isIn(allowedSortFields)
-            .withMessage(
-                `Invalid sort field. Allowed values: ${allowedSortFields.join(', ')}`,
-            ),
+            .default(DEFAULT_SORT_BY)
+            .isString()
+            .withMessage('sortBy must be a string'),
 
         query('sortDirection')
             .default(DEFAULT_SORT_DIRECTION)

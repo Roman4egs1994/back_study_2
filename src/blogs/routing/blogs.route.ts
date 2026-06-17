@@ -31,7 +31,7 @@ routerBlogs.put("/:id",idValidationParamId, superAdminGuardMiddleware, ...blogsV
 
 routerBlogs.delete("/:id",idValidationParamId, superAdminGuardMiddleware, validateResponseMiddleware(), deleteBlog)
 
-routerBlogs.get("/:id/posts", paginationAndSortingValidation(PostSortField),validateResponseMiddleware(),getAllPostByBlogId )
+routerBlogs.get("/:id/posts", idValidationParamId, paginationAndSortingValidation(PostSortField),validateResponseMiddleware(),getAllPostByBlogId )
 
 routerBlogs.post("/:id/posts", idValidationParamId, superAdminGuardMiddleware, ...postsValidationsWithoutBlogId, validateResponseMiddleware(), createPostByBlogId)
 
