@@ -12,3 +12,7 @@ export const verifyPassword = (inputPassword: string, storedHash: string, salt: 
     const hash = hashPassword(inputPassword, salt)
     return hash === storedHash
 }
+
+
+
+//upd
