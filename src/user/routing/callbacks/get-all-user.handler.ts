@@ -14,6 +14,8 @@ export const getAllUserHandler = async (req:Request, res:Response) => {
         pageSize: Number(req.query.pageSize) || 10,
         sortBy: req.query.sortBy as UserSortField || UserSortField.CreatedAt,
         sortDirection: req.query.sortDirection as SortDirection,
+        searchLoginTerm: req.query.searchLoginTerm as string | undefined,
+        searchEmailTerm: req.query.searchEmailTerm as string | undefined,
     }
 
         const users = await userService.getAllUserService(queryDto)
