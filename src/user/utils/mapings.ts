@@ -14,7 +14,8 @@ export const mapUserQueryWithItemsRes = (
     totalCount: number,
     queryDto: UserQueryInputT
 ): UserQueryResponseT => ({
-    pageNumber: Math.ceil(totalCount / queryDto.pageSize),
+    pagesCount: Math.ceil(totalCount / queryDto.pageSize),
+    page: queryDto.pageNumber,
     pageSize: queryDto.pageSize,
     totalCount,
     items: items.map(mapToUsers)

@@ -25,10 +25,11 @@ export type UserDtoT = {
 
 
 export type UserQueryResponseT = {
-    items: UserModelT[]
-    totalCount: number
-    pageNumber: number
+    pagesCount: number
+    page: number
     pageSize: number
+    totalCount: number
+    items: UserModelT[]
 }
 
 export type FieldErrorT = {
