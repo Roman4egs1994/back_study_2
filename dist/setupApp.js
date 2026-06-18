@@ -8,11 +8,13 @@ const express_1 = __importDefault(require("express"));
 const blogs_route_1 = require("./blogs/routing/blogs.route");
 const posts_route_1 = require("./posts/routing/posts.route");
 const route_testing_1 = require("./testing/routing/route.testing");
+const user_route_1 = require("./user/routing/user.route");
 const setupApp = (app) => {
     app.use(express_1.default.json());
     app.use(express_1.default.urlencoded({ extended: true }));
     app.use('/blogs', blogs_route_1.routerBlogs);
     app.use('/posts', posts_route_1.routerPosts);
+    app.use('/users', user_route_1.userRoute);
     app.use("/testing", route_testing_1.testingRoute);
     app.get('/hello-world', (req, res) => {
         res.send(' Test Express app!');
