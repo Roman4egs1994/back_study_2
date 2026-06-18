@@ -2,6 +2,7 @@ import express, {Express} from "express";
 import {routerBlogs} from "./blogs/routing/blogs.route";
 import {routerPosts} from "./posts/routing/posts.route";
 import {testingRoute} from "./testing/routing/route.testing";
+import {userRoute} from "./user/routing/user.route";
 
 
 export const setupApp = (app: Express) => {
@@ -11,7 +12,7 @@ export const setupApp = (app: Express) => {
 
     app.use('/blogs', routerBlogs);
     app.use('/posts', routerPosts);
-
+    app.use('/users', userRoute);
     app.use("/testing",testingRoute)
 
     app.get('/hello-world', (req, res) => {
