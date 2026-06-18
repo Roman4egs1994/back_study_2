@@ -28,8 +28,7 @@ export const userRepository = {
         return !!user
     },
 
-    async deleteUser(id: string) {
-        const user = await usersCollection.deleteOne({id})
-        return user
+    async deleteUser(id: string): Promise<void> {
+        await usersCollection.deleteOne({ _id: new ObjectId(id) })
     }
 }

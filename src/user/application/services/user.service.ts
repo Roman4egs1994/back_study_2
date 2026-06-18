@@ -1,5 +1,6 @@
 import {UserQueryInputT} from "../../routing/inputs";
 import {UserDtoT, UserModelT, UserQueryResponseT} from "../../types/user.type";
+import {DomainError} from "../../../core/errors/domain.error";
 import {userRepository} from "../../repositories/user.repositories";
 import {mapToUsers, mapUserQueryWithItemsRes} from "../../utils/mapings";
 import {usersQueryRepository} from "../../repositories/user.query.repositories";
@@ -16,8 +17,16 @@ export const userService = {
     createUserService: async (userDto: UserDtoT): Promise<UserModelT> => {
 
         const email = userDto.email.toLowerCase()
-        await userRepository.checkEmailExists(email)
-        await userRepository.checkLoginExists(userDto.login)
+
+        const emailExists = await userRepository.checkEmailExists(email)
+        if (emailExists) {
+            throw new DomainError('email should be unique', 'UNIQUE_VIOLATION', 'email')
+        }
+
+        const loginExists = await userRepository.checkLoginExists(userDto.login)
+        if (loginExists) {
+            throw new DomainError('login should be unique', 'UNIQUE_VIOLATION', 'login')
+        }
 
         const salt = generateSalt()
         const passwordHash = hashPassword(userDto.password, salt)

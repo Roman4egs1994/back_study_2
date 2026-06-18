@@ -6,6 +6,7 @@ export type UserDBT = {
     login: string
     email: string
     password: string
+    salt: string
     createdAt: string
 }
 
@@ -28,4 +29,8 @@ export type UserQueryResponseT = {
     totalCount: number
     pageNumber: number
     pageSize: number
+}
+
+export type FieldErrorT = {
+    errorsMessages: { field: string; message: string }[]
 }

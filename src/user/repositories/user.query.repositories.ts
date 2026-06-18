@@ -47,7 +47,7 @@ export const usersQueryRepository = {
     },
 
     getFindUserWithNull: async (id: ObjectId): Promise<UserDBT> => {
-        const user = await usersCollection.findOne(id)
+        const user = await usersCollection.findOne({ _id: id })
         if (!user) {
             throw new RepositoryNotFoundError('User not found')
         }

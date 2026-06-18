@@ -1,4 +1,4 @@
-import {PaginationAndSorting} from "../../core/type/paginationAndSorting.types";
+import {PaginationAndSorting} from "../../core/type/paginationAndSorting.types"
 
 export enum UserSortField{
  CreatedAt = "createdAt"
